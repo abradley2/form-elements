@@ -29,6 +29,7 @@ import Task
 -}
 type Msg a
     = NoOp
+    | Clear
     | TextInputMsg TextInput.Msg
     | UnsetFocusedOption
     | SetFocusedOption Int
@@ -306,6 +307,9 @@ update msg model props =
                                 ( newModel, cmd, ( props.value, props.inputValue ) )
                    )
 
+        Clear ->
+            ( model, Cmd.none, ( Nothing, "" ) )
+
         SetFocusedOption optionIndex ->
             ( { model
                 | focusedOption = Just optionIndex
@@ -482,5 +486,15 @@ view model props =
             model.textInputData
             (textInputSettings model props)
             |> Html.map TextInputMsg
+        , span
+            [ classList
+                [ ( "ess-clear-button", True )
+                , ( "ess-clear-button--show"
+                  , Maybe.map (\_ -> True) props.value |> Maybe.withDefault False
+                  )
+                ]
+            , onClick Clear
+            ]
+            [ text "X" ]
         , optionList model props
         ]
