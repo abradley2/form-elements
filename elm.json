@@ -3,7 +3,7 @@
     "name": "abradley2/form-elements",
     "summary": "Modules for creating user friendly form controls in elm",
     "license": "MIT",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "exposed-modules": [
         "FormElements.RadioButton",
         "FormElements.SuperSelect",
