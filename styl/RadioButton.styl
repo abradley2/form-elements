@@ -1,0 +1,73 @@
+@require './Variables.styl'
+
+.erb-checkmark
+    width 16px
+    height 10px
+    box-sizing border-box
+    transform translateY(-4px) rotate(-45deg) 
+    border-left 4px solid white
+    border-bottom 4px solid white
+    display inline-block
+
+.erb-container
+    display flex
+    align-items center
+    justify-content flex-start
+    cursor pointer
+    padding 8px
+    color font-color
+
+.erb-hidden-checkbox
+    width 0px
+    height 0px
+    overflow hidden
+
+.erb-circle-group
+    position relative
+
+.erb-circle-group__outer
+    border-radius 50%
+    border solid 2px primary-color
+    width 24px
+    height 24px
+    line-height 100%
+    text-align center
+    margin-right 16px
+    box-sizing border-box
+    transition .25s
+
+.erb-square-group__outer--selected
+    background-color primary-color
+
+.erb-square-group__outer
+    font-size 20px
+    border solid 2px primary-color
+    width 24px
+    height 24px
+    line-height 100%
+    text-align center
+    margin-right 16px
+    box-sizing border-box
+    transition .25s
+    color white
+
+.erb-circle-group__outer--selected
+    border solid 3px primary-color
+
+
+.erb-circle-group__inner
+    display inline-block
+    border-radius 50%
+    top 0
+    left 0
+    border solid 0px primary-color
+    width 0px
+    height 0px
+    transition .25s
+    background-color primary-color
+    margin-top 3px
+
+.erb-circle-group__inner--selected
+    width 12px
+    height 12px
+    margin-top 3px

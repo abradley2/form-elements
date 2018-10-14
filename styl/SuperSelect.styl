@@ -1,0 +1,37 @@
+@require './Variables.styl'
+
+.ess-container
+    position relative
+    .ess-option-list-container
+        box-shadow none
+        background-color white
+        opacity 1
+        position absolute
+        top 56px
+        max-height 0px
+        overflow auto
+    .ess-option-list-container--open
+        z-index 100
+        background-color white
+        max-height 500px
+        box-shadow 1px 1px 1px 1px rgba(0, 0, 0, 0.16)
+
+    .ess-option-list__button
+        cursor pointer
+        display flex
+        align-items center
+        text-align left
+        font-size 20px
+        padding 8px
+        border none
+        outline none
+        background-color transparent
+        width 100%
+        &:focus
+            outline none
+    .ess-option-list__button--focused
+        background-color light-shade
+    .ess-option-list__word
+        color label-color
+    .ess-option-list__word--match
+        color font-color

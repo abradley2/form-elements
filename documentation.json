@@ -1,0 +1,135 @@
+[
+  {
+    "name": "SuperSelect",
+    "comment": " A super select widget for Elm\n\n# TEA\n@docs view, init, update, subscriptions, defaultProps, Msg, Model, Props, Option\n\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " model\n* `id` The unique id of the element. This is passed as the first argument to `init`\n* `value` The currently selected option\n* `inputValue` The text input value for the underlying `TextInput` element\n* `textInputData` Key for allocating the model of the underlying `TextInput` element\n",
+        "args": [],
+        "type": "{ id : String , inputValue : String , textInputData : TextInput.Model , focusedOption : Maybe.Maybe Int , hasFocus : Bool }"
+      },
+      {
+        "name": "Option",
+        "comment": " Option\nOption for the select menu\n",
+        "args": [],
+        "type": "{ value : String, label : String }"
+      },
+      {
+        "name": "Props",
+        "comment": " props\n* `errorText` If you wish to communicate the selection as invalid, set it to the error message\n* `helperText` Helper text to guide the user's input. Not shown if `errorText` is set to non-`Nothing`\n* `label` input label for the text input\n",
+        "args": [],
+        "type": "{ id : String , options : List SuperSelect.Option , errorText : Maybe.Maybe String , helperText : Maybe.Maybe String , label : String , value : Maybe.Maybe SuperSelect.Option }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Msg\n* `TextInputMsg` the messages used by the underlying `TextInput` element\n* `OptionSelected` fired when an option is selected\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "defaultProps",
+        "comment": " defaultProps\nDefault properties for the element. The props actually passed in should generally have `label` set to\na non-empty string\n",
+        "type": "SuperSelect.Props"
+      },
+      {
+        "name": "init",
+        "comment": " Init\nCreates the initial model for the element. `id` should be a _unique_ string identifier.\nThe second argument are the `Option` records since these are often initially decided.\nIf you are loading the options asynchronously as a response to user input, the options\nshould be set via a `setNewOptions` in your update function.\n",
+        "type": "String -> ( SuperSelect.Model, Platform.Cmd.Cmd SuperSelect.Msg )"
+      },
+      {
+        "name": "subscriptions",
+        "comment": " subscriptions\nAs this element requires listening to keyboard events, the subscriptions must be added\nto your main function so it may do so.\n",
+        "type": "List ( String, SuperSelect.Props ) -> Platform.Sub.Sub SuperSelect.Msg"
+      },
+      {
+        "name": "update",
+        "comment": " Update\nThe function for updating the element.\n",
+        "type": "SuperSelect.Msg -> SuperSelect.Model -> SuperSelect.Props -> ( SuperSelect.Model , Platform.Cmd.Cmd SuperSelect.Msg , Maybe.Maybe SuperSelect.Option )"
+      },
+      {
+        "name": "view",
+        "comment": " View\nThe view for displaying the element.\n",
+        "type": "SuperSelect.Model -> SuperSelect.Props -> Html.Html SuperSelect.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.18.0"
+  },
+  {
+    "name": "TextInput",
+    "comment": " A text input widget for Elm\n\n# TEA\n@docs view, init, update, defaultProps, Msg, Model, Props\n\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Model\nTracks the internal foxus state of the element\n",
+        "args": [],
+        "type": "{ id : String, hasFocus : Bool }"
+      },
+      {
+        "name": "Props",
+        "comment": " Props\n* `id` Unique id for the elements\n* `label` Label for the text input\n* `value` The value of the text input\n* `errorText` Set this to a string when there is a validation error to display to the user. Will override `helperText`\n* `helperText` Helpful text displayed under the text input\n",
+        "args": [],
+        "type": "{ id : String , label : String , value : String , errorText : Maybe.Maybe String , helperText : Maybe.Maybe String }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Msg\n* `OnInput`\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "defaultProps",
+        "comment": " defaultProps\nDefault props for the text input. Generally the label should be set before passing\nthese defaults to the `view`\n",
+        "type": "TextInput.Props"
+      },
+      {
+        "name": "init",
+        "comment": " init\nInitialization for the text input model. The `id` passed in _must be unique_\n",
+        "type": "String -> ( TextInput.Model, Platform.Cmd.Cmd TextInput.Msg )"
+      },
+      {
+        "name": "update",
+        "comment": " update\nThe update function for the text input element\n",
+        "type": "TextInput.Msg -> TextInput.Model -> ( TextInput.Model, Platform.Cmd.Cmd TextInput.Msg )"
+      },
+      {
+        "name": "view",
+        "comment": " view\nThe view function for displaying the text input element\n",
+        "type": "TextInput.Model -> TextInput.Props -> Html.Html TextInput.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.18.0"
+  },
+  {
+    "name": "RadioButtonGroup",
+    "comment": " A text input widget for Elm\n\n# TEA\n@docs view, Props\n\n",
+    "aliases": [
+      {
+        "name": "Props",
+        "comment": " Props\nProperties for rendering the view\n",
+        "args": [
+          "x",
+          "y"
+        ],
+        "type": "{ selected : x, options : List ( String, x ), onSelect : x -> y }"
+      }
+    ],
+    "types": [],
+    "values": [
+      {
+        "name": "view",
+        "comment": " view\nView for displaying the radio button group\n",
+        "type": "RadioButtonGroup.Props x y -> Html.Html y"
+      }
+    ],
+    "generated-with-elm-version": "0.18.0"
+  }
+]

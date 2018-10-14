@@ -1,0 +1,83 @@
+@require './Variables.styl'
+
+.eti-container
+    position relative
+    background-color light-shade
+    max-width 280px
+    margin-bottom 16px
+    height 56px
+    display flex
+    align-items center
+    cursor text
+    border-radius 3px
+    color font-color
+    &.eti-outline
+        background-color transparent
+        border solid 1px font-color
+    &.eti-outline--focused
+        border solid 1px primary-color
+        box-shadow 0px 0px 0px 1px primary-color
+
+    .eti-text-input__wrapper
+        display inline-block
+
+    .eti-text-input__input
+        background-color transparent
+        border none
+        outline none
+        font-size 16px
+        height calc(56px - 8px) // subtract padding top so we have some breathing room from top label
+        padding 8px 8px 0px 8px
+
+    .eti-text-input__label
+        position absolute
+        top 4px
+        font-size 16px
+        transition .25s
+        padding-left 8px
+        pointer-events none
+        top calc(50% - 8px)
+        color label-color
+
+    .eti-text-input__label--raised
+        top calc(0% + 4px)
+        font-size 12px
+
+    .eti-text-input__label--active
+        color primary-color
+
+    .eti-bottom-line__container
+        position absolute
+        left 0
+        bottom 0
+        right 0
+        height 2px
+        background-color medium-shade
+
+    .eti-bottom-line__relative-wrapper
+        position relative
+
+    .eti-bottom-line__highlighter
+        position absolute
+        z-index 1
+        transition .25s
+        left 50%
+        right 50%
+        height 2px
+        background-color primary-color
+
+    .eti-bottom-line__highlighter--active
+        left 0%
+        right 0%
+
+    .eti-bottom-text
+        font-size 12px
+        padding-left 8px
+        position absolute
+        top 60px
+
+    .eti-bottom-text--error
+        color error-color
+
+    .eti-bottom-text--helper
+        color label-color
