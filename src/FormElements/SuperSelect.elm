@@ -266,7 +266,14 @@ update msg model props =
                 |> (\( newModel, cmd ) ->
                         case textInputMsg of
                             TextInput.OnInput value ->
-                                ( { newModel | focusedOption = Nothing }
+                                ( { newModel
+                                    | focusedOption =
+                                        if value /= props.inputValue then
+                                            Nothing
+
+                                        else
+                                            model.focusedOption
+                                  }
                                 , cmd
                                 , ( Nothing, value )
                                 )
