@@ -106,7 +106,7 @@ maybeToBool =
 
 isRelevantKey : Int -> Bool
 isRelevantKey keyCode =
-    List.filter (\k -> k == keyCode) [ 38, 40, 9, 13 ]
+    List.filter (\k -> k == keyCode) [ 38, 40, 13 ]
         |> List.head
         |> maybeToBool
 

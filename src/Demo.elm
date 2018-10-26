@@ -19,6 +19,7 @@ import Dict
 import FormElements.CheckBox as CheckBox
 import FormElements.RadioButton as RadioButton
 import FormElements.SuperSelect as SuperSelect
+import FormElements.Switch as Switch
 import FormElements.TextInput as TextInput
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -32,6 +33,7 @@ type Chamber
 
 type Msg
     = NoOp
+    | ToggleSwitch Bool
     | TextInputMsg TextInput.Msg
     | SuperSelectMsg (SuperSelect.Msg ( String, Place ))
     | SelectChamber Chamber
@@ -46,7 +48,8 @@ type CheckboxOption
 
 
 type alias Model =
-    { textInputData : TextInput.Model
+    { switchToggled : Bool
+    , textInputData : TextInput.Model
     , superSelectData : SuperSelect.Model
     , superSelectText : String
     , places : List (SuperSelect.Option ( String, Place ))
@@ -84,7 +87,8 @@ init flags =
         ( superSelectData, superSelectCmd ) =
             SuperSelect.init superSelectId
     in
-    ( { textInputData = textInputData
+    ( { switchToggled = False
+      , textInputData = textInputData
       , superSelectData = superSelectData
       , superSelectText = ""
       , message = ""
@@ -112,6 +116,13 @@ init flags =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ToggleSwitch isToggled ->
+            ( { model
+                | switchToggled = isToggled
+              }
+            , Cmd.none
+            )
+
         NoOp ->
             ( model, Cmd.none )
 
@@ -234,6 +245,15 @@ view model =
         , style "flex-flow" "column"
         ]
         [ div
+            [ style "max-width" "320px"
+            , style "margin-top" "48px"
+            ]
+            [ Switch.view
+                model.switchToggled
+                "Show Filters"
+                ToggleSwitch
+            ]
+        , div
             [ style "max-width" "320px"
             , style "margin-top" "48px"
             ]

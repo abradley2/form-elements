@@ -188,6 +188,7 @@
 }
 .erb-square-group__outer {
   font-size: 20px;
+  border-radius: 3px;
   border: solid 2px #60b5cd;
   width: 24px;
   height: 24px;
@@ -217,4 +218,52 @@
   width: 12px;
   height: 12px;
   margin-top: 3px;
+}
+.elm-switch-container {
+  display: inline-block;
+}
+.elm-switch-container .elm-switch__label {
+  color: rgba(0,0,0,0.54);
+  font-size: 12px;
+}
+.elm-switch-container .elm-switch__label--toggled {
+  color: #60b5cd;
+}
+.elm-switch-container .elm-switch {
+  display: inline-block;
+  width: 80px;
+  height: 40px;
+  cursor: pointer;
+  border: solid 1px rgba(0,0,0,0.54);
+  border-color: rgba(0,0,0,0.54);
+  border-radius: 3px;
+  margin: 1px;
+  position: relative;
+  transition: 0.25s;
+  background-color: rgba(0,0,0,0.08);
+}
+.elm-switch-container .elm-switch.elm-switch--selected {
+  border-color: rgba(0,0,0,0.08);
+  background-color: #60b5cd;
+}
+.elm-switch-container .elm-switch .elm-switch__switch-indicator {
+  display: flex;
+  background-color: #fff;
+  transition: 0.25s;
+  color: rgba(0,0,0,0.54);
+  text-align: center;
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  height: 44px;
+  width: 44px;
+  line-height: 12px;
+  box-sizing: border-box;
+  border: solid 3px rgba(0,0,0,0.54);
+  border-radius: 3px;
+}
+.elm-switch-container .elm-switch .elm-switch__switch-indicator--toggled {
+  left: 38px;
+  color: #60b5cd;
+  border: solid 3px secondary-color;
 }
