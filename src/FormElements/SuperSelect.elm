@@ -21,11 +21,7 @@ import String
 import Task
 
 
-{-| Msg
-
-  - `TextInputMsg` the messages used by the underlying `TextInput` element
-  - `OptionSelected` fired when an option is selected
-
+{-| Messages output from the `view` in the Elm runtime. Combine these with `update`
 -}
 type Msg a
     = NoOp
@@ -60,7 +56,7 @@ type alias Option a =
     ( String, a )
 
 
-{-| props
+{-|
 
   - `errorText` If you wish to communicate the selection as invalid, set it to the error message
   - `helperText` Helper text to guide the user's input. Not shown if `errorText` is set to non-`Nothing`
@@ -83,8 +79,7 @@ textInputId parentId =
     parentId ++ "__text-input"
 
 
-{-| defaultProps
-Default properties for the element. The props actually passed in should generally have `label` set to
+{-| Default properties for the element. The props actually passed in should generally have `label` set to
 a non-empty string
 -}
 defaultProps : Props a

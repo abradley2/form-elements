@@ -1,20 +1,71 @@
-# Elm Form Controls
+# Form Elements
 
 To include in your project, add `FormFields.css` to your document.
 
 To change variables in these styles, go into _styl/Variables.styl_, edit the appropriate
 variables, and run `npm install && npm run build-styles` to get an updated `FormFields.css` file.
 
-### TEA
+# TEA
 
-The modules in this repo all use similarly grouped functions to achieve their behavior.
+Elm doesn't have a traditional concept of "components": stateful mutable bits in your UI
+that change over time, like you have in libraries such as React. Instead Elm encourages reusable functions.
 
-Each will have at most the following exports
+Every module here is some group of related helpers that allow you to represent a certain
+form control in your application. Some form controls require a decent number of functions
+to maintain a working element- like the "Super Select". Others like the simple "Checkbox"
+just need a single `view` function.
 
-1. `init` - Get an initial model representation for the element  
-2. `view` - Html representation of the element that returns `Html Msg`  
-3. `Msg` - outgoing messages that will be emitted by the view, map these to your own `Msg` type!  
-4. `update` - used to get a new representation of the model based on emitted messages. For more complex controls like the SuperSelect, there may be additional information,  
-5. `Config` - a type representing a record that the `view` function should be passed on render. Much of the data in this type lives in the model you manage as opposed to the opaque `Model` you store in your own for each element
-6. `Model` - generally an opaque type for an element's datastructure that it will concern itself with via `update` and you don't need to care about. For example, you are expected to store things like the selected option and the current value of the text field for the SuperSelect in the managed part of your model, and pass it to the `view` in `Config`. But things like hover state, focus state, and whatnot that live in the element's model can have that managed abstracted away by it's corresponding `update` function
+**Important**  
+The best way to figure out how to use these elements is probably just to check out
+the demonstration source code.
 
+## Config
+
+If a form element's module exports a type called `Config` then it expects this to be passed
+as an argument to the `view` function. If you are coming from React, than you can think of
+`Config` as something very similar to props. The purpose of this type is pretty straight forward.
+Any configuration parameters useful to the view are here. Like what the text input's "value" should be,
+or what message the radio button group should send out to the Elm runtime when an option is selected.
+
+## Model
+
+In addition to a `Config`, a form element might export a type called `Model`. While the
+`Config` object contains much of the dynamic data that the `view` function uses to display- there's
+some data that is inconvenient to k.
+
+You might wonder, why not extend this convenience to data in the `Config` as well? Why must I manually
+update the text input's value when things like a text inputs hover state
+
+## view
+
+The view function returns type `Html Msg` or `Html a` depending on whether the element's module
+also includes an `update` that handles specific types of messages unique to that element.
+
+Views also take an associated `Config` record which has parameters that tell it to
+display or certain way, or emit certain messages in response to an event.
+
+The `RadioButtonGroup.view` for example, returns `Html a` where the `onSelect` field in the `Config` record
+is type `b -> a` and the options field is a list of type `(String, b)`
+
+```
+RadioButton.view
+  { options =
+      [ ( "Senate", Senate )
+      , ( "House", House )
+      ]
+  , onSelect = SelectChamber
+  , selected = model.chamber
+  }
+```
+
+The `TextInput.view` on the other hand returns `Html TextInput.Msg` as the views `Html`
+emits certain `TextInput.Msg` events which the `TextInput.update` function needs to handle.
+
+You will need to use `Html.map`
+
+```
+TextInput.view
+    model.textInputData
+    (textInputSettings model props)
+    |> Html.map TextInputMsg
+```

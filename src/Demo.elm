@@ -250,7 +250,14 @@ view model =
             ]
             [ Switch.view
                 model.switchToggled
-                "Show Filters"
+                ("Developer Mode "
+                    ++ (if model.switchToggled then
+                            "(On)"
+
+                        else
+                            "(Off)"
+                       )
+                )
                 ToggleSwitch
             ]
         , div
