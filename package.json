@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "start": "concurrently \"elm-live ./src/Demo.elm  --open --pushstate -- --debug --output=demo.js\" \"stylus -w ./styl/FormFields.styl -o ./\"",
-    "build": "npm run build-styles && elm-make ./src/Demo.elm --output ./demo.js && npm run uglify",
+    "build": "npm run build-styles && elm make ./src/Demo.elm --output ./demo.js && npm run uglify",
     "build-styles": "stylus ./styl/FormFields.styl -o ./",
     "test": "echo \"Error: no test specified\" && exit 1",
     "uglify": "uglifyjs ./demo.js --output ./demo.js"
