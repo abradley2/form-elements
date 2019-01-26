@@ -1,4 +1,7 @@
-module FormElements.TextInput exposing (view, init, update, defaultProps, Msg(..), Model, Props)
+module FormElements.TextInput exposing
+    ( view, init, update, defaultProps, Msg(..), Model, Props
+    , ExternMsg(..), TextInputResult
+    )
 
 {-| A text input widget for Elm
 
@@ -9,13 +12,16 @@ module FormElements.TextInput exposing (view, init, update, defaultProps, Msg(..
 
 -}
 
-import Browser.Dom exposing (focus)
+import ComponentResult as CR
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode
 import Maybe as M
-import Task
+
+
+type alias TextInputResult =
+    CR.ComponentResult Model Msg ExternMsg Never
 
 
 {-| Msg
@@ -29,6 +35,16 @@ type Msg
     | OnFocus
     | OnBlur
     | OnInputKeyPress Int
+
+
+{-| ExternMsg
+
+  - `ValueChanged String`
+
+-}
+type ExternMsg
+    = ValueChanged String
+    | Internal Msg
 
 
 {-| Model
@@ -94,24 +110,24 @@ init id =
 {-| update
 The update function for the text input element
 -}
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model -> TextInputResult
 update msg model =
     case msg of
         NoOp ->
-            ( model, Cmd.none )
+            CR.withModel model
 
         OnBlur ->
-            ( { model
-                | hasFocus = False
-              }
-            , Cmd.none
-            )
+            CR.withModel { model | hasFocus = False }
 
         OnFocus ->
-            ( { model | hasFocus = True }, Cmd.none )
+            CR.withModel { model | hasFocus = True }
+
+        OnInput newVal ->
+            CR.withModel model
+                |> CR.withExternalMsg (ValueChanged newVal)
 
         _ ->
-            ( model, Cmd.none )
+            CR.withModel model
 
 
 getTextInputId : String -> String
