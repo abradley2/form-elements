@@ -179,82 +179,65 @@ getFocusedOption model props =
                     Maybe.map (\value -> Just ( props.inputValue, value )) props.value
 
 
-handleKeyPress : Model -> Props a -> Int -> ( Model, Cmd (Msg a), ( Maybe a, String ) )
+handleKeyPress : Model -> Props a -> Int -> SuperSelectResult a
 handleKeyPress model props keyCode =
     let
         optionIndex =
             Maybe.withDefault -1 model.focusedOption
-
-        ( updateModel, updateValue ) =
-            case keyCode of
-                38 ->
-                    ( { model
-                        | focusedOption =
-                            Just <|
-                                if optionIndex - 1 >= 0 then
-                                    optionIndex - 1
-
-                                else
-                                    optionIndex
-                      }
-                    , ( props.value, props.inputValue )
-                    )
-
-                40 ->
-                    ( { model
-                        | focusedOption =
-                            Just <|
-                                if optionIndex + 1 == List.length (getFilteredOptions model props) then
-                                    optionIndex
-
-                                else
-                                    optionIndex + 1
-                      }
-                    , ( props.value, props.inputValue )
-                    )
-
-                13 ->
-                    let
-                        selectedOption =
-                            getFocusedOption model props |> Maybe.map (\( label, value ) -> value)
-
-                        inputValue =
-                            Maybe.withDefault props.inputValue <|
-                                Maybe.map Tuple.first (getFocusedOption model props)
-                    in
-                    ( { model
-                        | focusedOption = Nothing
-                      }
-                    , ( selectedOption
-                      , inputValue
-                      )
-                    )
-
-                9 ->
-                    let
-                        selectedOption =
-                            Maybe.map
-                                (\( label, value ) -> value)
-                                (getFocusedOption model props)
-
-                        inputValue =
-                            Maybe.withDefault props.inputValue <|
-                                Maybe.map (\( label, value ) -> label) (getFocusedOption model props)
-                    in
-                    ( model
-                    , ( selectedOption
-                      , inputValue
-                      )
-                    )
-
-                _ ->
-                    ( model
-                    , ( props.value
-                      , props.inputValue
-                      )
-                    )
     in
-    ( updateModel, Cmd.none, updateValue )
+    case keyCode of
+        38 ->
+            CR.withModel
+                { model
+                    | focusedOption =
+                        Just <|
+                            if optionIndex - 1 >= 0 then
+                                optionIndex - 1
+
+                            else
+                                optionIndex
+                }
+
+        40 ->
+            CR.withModel
+                { model
+                    | focusedOption =
+                        Just <|
+                            if optionIndex + 1 == List.length (getFilteredOptions model props) then
+                                optionIndex
+
+                            else
+                                optionIndex + 1
+                }
+
+        13 ->
+            let
+                selectedOption =
+                    getFocusedOption model props |> Maybe.map (\( label, value ) -> value)
+
+                inputValue =
+                    Maybe.withDefault props.inputValue <|
+                        Maybe.map Tuple.first (getFocusedOption model props)
+            in
+            CR.withModel { model | focusedOption = Nothing }
+                |> CR.withExternalMsg (ValueChanged inputValue selectedOption)
+
+        9 ->
+            let
+                selectedOption =
+                    Maybe.map
+                        (\( label, value ) -> value)
+                        (getFocusedOption model props)
+
+                inputValue =
+                    Maybe.withDefault props.inputValue <|
+                        Maybe.map (\( label, value ) -> label) (getFocusedOption model props)
+            in
+            CR.withModel model
+                |> CR.withExternalMsg (ValueChanged inputValue selectedOption)
+
+        _ ->
+            CR.withModel model
 
 
 handleTextInputInternal props textInputMsg model =
@@ -333,16 +316,14 @@ update msg model props =
             CR.withModel { model | focusedOption = Nothing }
                 |> CR.withExternalMsg (ValueChanged label (Just value))
 
-        -- KeyPress superSelectProps keyCode ->
-        --     if model.hasFocus then
-        --         handleKeyPress model superSelectProps keyCode
-        --
-        --     else
-        --         ( model, Cmd.none, ( props.value, props.inputValue ) )
-        NoOp ->
-            CR.withModel model
+        KeyPress superSelectProps keyCode ->
+            if model.hasFocus then
+                handleKeyPress model superSelectProps keyCode
 
-        _ ->
+            else
+                CR.withModel model
+
+        NoOp ->
             CR.withModel model
 
 

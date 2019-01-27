@@ -9983,49 +9983,51 @@ var abradley2$form_elements$FormElements$SuperSelect$ValueChanged = F2(
 	function (a, b) {
 		return {$: 'ValueChanged', a: a, b: b};
 	});
-var abradley2$form_elements$FormElements$SuperSelect$handleTextInputInternal = F3(
-	function (props, textInputMsg, model) {
-		switch (textInputMsg.$) {
-			case 'OnFocus':
-				return _Utils_update(
-					model,
-					{focusedOption: elm$core$Maybe$Nothing, hasFocus: true});
-			case 'OnBlur':
-				var inputValue = _Utils_eq(props.value, elm$core$Maybe$Nothing) ? '' : props.inputValue;
-				return _Utils_update(
-					model,
-					{hasFocus: false});
-			default:
-				return model;
+var elm$core$String$toUpper = _String_toUpper;
+var abradley2$form_elements$FormElements$SuperSelect$matches = function (base) {
+	return A2(
+		elm$core$Basics$composeR,
+		elm$core$String$toUpper,
+		elm$core$String$contains(
+			elm$core$String$toUpper(base)));
+};
+var abradley2$form_elements$FormElements$SuperSelect$getFilteredOptions = F2(
+	function (model, props) {
+		return A2(
+			elm$core$List$filter,
+			function (_n0) {
+				var label = _n0.a;
+				var value = _n0.b;
+				return A2(abradley2$form_elements$FormElements$SuperSelect$matches, props.inputValue, label);
+			},
+			props.options);
+	});
+var abradley2$form_elements$FormElements$SuperSelect$getFocusedOption = F2(
+	function (model, props) {
+		var opts = A2(abradley2$form_elements$FormElements$SuperSelect$getFilteredOptions, model, props);
+		var _n0 = model.focusedOption;
+		if (_n0.$ === 'Just') {
+			var focusedOption = _n0.a;
+			return A2(
+				elm$core$Array$get,
+				focusedOption,
+				elm$core$Array$fromList(opts));
+		} else {
+			return (elm$core$List$length(opts) === 1) ? elm$core$List$head(opts) : A2(
+				elm$core$Maybe$withDefault,
+				elm$core$Maybe$Nothing,
+				A2(
+					elm$core$Maybe$map,
+					function (value) {
+						return elm$core$Maybe$Just(
+							_Utils_Tuple2(props.inputValue, value));
+					},
+					props.value));
 		}
 	});
 var z5h$component_result$ComponentResult$JustError = function (a) {
 	return {$: 'JustError', a: a};
 };
-var z5h$component_result$ComponentResult$ModelAndCmd = F2(
-	function (a, b) {
-		return {$: 'ModelAndCmd', a: a, b: b};
-	});
-var z5h$component_result$ComponentResult$applyExternalMsg = F2(
-	function (f, result) {
-		switch (result.$) {
-			case 'ModelAndCmd':
-				var model = result.a;
-				var msgCmd = result.b;
-				return A2(z5h$component_result$ComponentResult$ModelAndCmd, model, msgCmd);
-			case 'ModelAndExternal':
-				var model = result.a;
-				var externalMsg = result.b;
-				var msgCmd = result.c;
-				return A2(
-					f,
-					externalMsg,
-					A2(z5h$component_result$ComponentResult$ModelAndCmd, model, msgCmd));
-			default:
-				var err = result.a;
-				return z5h$component_result$ComponentResult$JustError(err);
-		}
-	});
 var z5h$component_result$ComponentResult$ModelAndExternal = F3(
 	function (a, b, c) {
 		return {$: 'ModelAndExternal', a: a, b: b, c: c};
@@ -10042,6 +10044,123 @@ var z5h$component_result$ComponentResult$withExternalMsg = F2(
 				var aNever = result.b;
 				var cmd = result.c;
 				return elm$core$Basics$never(aNever);
+			default:
+				var err = result.a;
+				return z5h$component_result$ComponentResult$JustError(err);
+		}
+	});
+var z5h$component_result$ComponentResult$ModelAndCmd = F2(
+	function (a, b) {
+		return {$: 'ModelAndCmd', a: a, b: b};
+	});
+var z5h$component_result$ComponentResult$withModel = function (model) {
+	return A2(z5h$component_result$ComponentResult$ModelAndCmd, model, elm$core$Platform$Cmd$none);
+};
+var abradley2$form_elements$FormElements$SuperSelect$handleKeyPress = F3(
+	function (model, props, keyCode) {
+		var optionIndex = A2(elm$core$Maybe$withDefault, -1, model.focusedOption);
+		switch (keyCode) {
+			case 38:
+				return z5h$component_result$ComponentResult$withModel(
+					_Utils_update(
+						model,
+						{
+							focusedOption: elm$core$Maybe$Just(
+								((optionIndex - 1) >= 0) ? (optionIndex - 1) : optionIndex)
+						}));
+			case 40:
+				return z5h$component_result$ComponentResult$withModel(
+					_Utils_update(
+						model,
+						{
+							focusedOption: elm$core$Maybe$Just(
+								_Utils_eq(
+									optionIndex + 1,
+									elm$core$List$length(
+										A2(abradley2$form_elements$FormElements$SuperSelect$getFilteredOptions, model, props))) ? optionIndex : (optionIndex + 1))
+						}));
+			case 13:
+				var selectedOption = A2(
+					elm$core$Maybe$map,
+					function (_n1) {
+						var label = _n1.a;
+						var value = _n1.b;
+						return value;
+					},
+					A2(abradley2$form_elements$FormElements$SuperSelect$getFocusedOption, model, props));
+				var inputValue = A2(
+					elm$core$Maybe$withDefault,
+					props.inputValue,
+					A2(
+						elm$core$Maybe$map,
+						elm$core$Tuple$first,
+						A2(abradley2$form_elements$FormElements$SuperSelect$getFocusedOption, model, props)));
+				return A2(
+					z5h$component_result$ComponentResult$withExternalMsg,
+					A2(abradley2$form_elements$FormElements$SuperSelect$ValueChanged, inputValue, selectedOption),
+					z5h$component_result$ComponentResult$withModel(
+						_Utils_update(
+							model,
+							{focusedOption: elm$core$Maybe$Nothing})));
+			case 9:
+				var selectedOption = A2(
+					elm$core$Maybe$map,
+					function (_n3) {
+						var label = _n3.a;
+						var value = _n3.b;
+						return value;
+					},
+					A2(abradley2$form_elements$FormElements$SuperSelect$getFocusedOption, model, props));
+				var inputValue = A2(
+					elm$core$Maybe$withDefault,
+					props.inputValue,
+					A2(
+						elm$core$Maybe$map,
+						function (_n2) {
+							var label = _n2.a;
+							var value = _n2.b;
+							return label;
+						},
+						A2(abradley2$form_elements$FormElements$SuperSelect$getFocusedOption, model, props)));
+				return A2(
+					z5h$component_result$ComponentResult$withExternalMsg,
+					A2(abradley2$form_elements$FormElements$SuperSelect$ValueChanged, inputValue, selectedOption),
+					z5h$component_result$ComponentResult$withModel(model));
+			default:
+				return z5h$component_result$ComponentResult$withModel(model);
+		}
+	});
+var abradley2$form_elements$FormElements$SuperSelect$handleTextInputInternal = F3(
+	function (props, textInputMsg, model) {
+		switch (textInputMsg.$) {
+			case 'OnFocus':
+				return _Utils_update(
+					model,
+					{focusedOption: elm$core$Maybe$Nothing, hasFocus: true});
+			case 'OnBlur':
+				var inputValue = _Utils_eq(props.value, elm$core$Maybe$Nothing) ? '' : props.inputValue;
+				return _Utils_update(
+					model,
+					{hasFocus: false});
+			default:
+				return model;
+		}
+	});
+var z5h$component_result$ComponentResult$applyExternalMsg = F2(
+	function (f, result) {
+		switch (result.$) {
+			case 'ModelAndCmd':
+				var model = result.a;
+				var msgCmd = result.b;
+				return A2(z5h$component_result$ComponentResult$ModelAndCmd, model, msgCmd);
+			case 'ModelAndExternal':
+				var model = result.a;
+				var externalMsg = result.b;
+				var msgCmd = result.c;
+				return A2(
+					f,
+					externalMsg,
+					A2(z5h$component_result$ComponentResult$ModelAndCmd, model, msgCmd));
 			default:
 				var err = result.a;
 				return z5h$component_result$ComponentResult$JustError(err);
@@ -10132,9 +10251,6 @@ var abradley2$form_elements$FormElements$SuperSelect$handleTextInputUpdate = F4(
 var abradley2$form_elements$FormElements$TextInput$ValueChanged = function (a) {
 	return {$: 'ValueChanged', a: a};
 };
-var z5h$component_result$ComponentResult$withModel = function (model) {
-	return A2(z5h$component_result$ComponentResult$ModelAndCmd, model, elm$core$Platform$Cmd$none);
-};
 var abradley2$form_elements$FormElements$TextInput$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -10203,8 +10319,10 @@ var abradley2$form_elements$FormElements$SuperSelect$update = F3(
 						_Utils_update(
 							model,
 							{focusedOption: elm$core$Maybe$Nothing})));
-			case 'NoOp':
-				return z5h$component_result$ComponentResult$withModel(model);
+			case 'KeyPress':
+				var superSelectProps = msg.a;
+				var keyCode = msg.b;
+				return model.hasFocus ? A3(abradley2$form_elements$FormElements$SuperSelect$handleKeyPress, model, superSelectProps, keyCode) : z5h$component_result$ComponentResult$withModel(model);
 			default:
 				return z5h$component_result$ComponentResult$withModel(model);
 		}
@@ -10586,25 +10704,6 @@ var abradley2$form_elements$FormElements$RadioButton$view = function (props) {
 			props.options));
 };
 var abradley2$form_elements$FormElements$SuperSelect$Clear = {$: 'Clear'};
-var elm$core$String$toUpper = _String_toUpper;
-var abradley2$form_elements$FormElements$SuperSelect$matches = function (base) {
-	return A2(
-		elm$core$Basics$composeR,
-		elm$core$String$toUpper,
-		elm$core$String$contains(
-			elm$core$String$toUpper(base)));
-};
-var abradley2$form_elements$FormElements$SuperSelect$getFilteredOptions = F2(
-	function (model, props) {
-		return A2(
-			elm$core$List$filter,
-			function (_n0) {
-				var label = _n0.a;
-				var value = _n0.b;
-				return A2(abradley2$form_elements$FormElements$SuperSelect$matches, props.inputValue, label);
-			},
-			props.options);
-	});
 var abradley2$form_elements$FormElements$SuperSelect$OptionSelected = function (a) {
 	return {$: 'OptionSelected', a: a};
 };
