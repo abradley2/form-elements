@@ -11,6 +11,7 @@ module FormElements.SuperSelect exposing (view, init, update, subscriptions, def
 
 import Array
 import Browser.Events as BrowserEvents
+import ComponentResult as CR
 import FormElements.TextInput as TextInput exposing (Msg(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -54,6 +55,14 @@ Option for the select menu
 -}
 type alias Option a =
     ( String, a )
+
+
+type ExternMsg a
+    = ValueChanged (Maybe (Option a))
+
+
+type alias SuperSelectResult a =
+    CR.ComponentResult Model (Msg a) (ExternMsg a) Never
 
 
 {-|
@@ -245,94 +254,92 @@ handleKeyPress model props keyCode =
     ( updateModel, Cmd.none, updateValue )
 
 
+handleTextInputMsg : Props a -> TextInput.ExternMsg -> SuperSelectResult a -> SuperSelectResult a
+handleTextInputMsg props textInputMsg result =
+    case textInputMsg of
+        TextInput.Internal (TextInput.OnInput value) ->
+            result
+
+        TextInput.Internal TextInput.OnFocus ->
+            result
+                |> CR.mapModel
+                    (\model ->
+                        { model
+                            | focusedOption = Nothing
+                            , hasFocus = True
+                        }
+                    )
+
+        TextInput.Internal TextInput.OnBlur ->
+            let
+                inputValue =
+                    if props.value == Nothing then
+                        ""
+
+                    else
+                        props.inputValue
+            in
+            result
+                |> CR.mapModel
+                    (\model ->
+                        { model
+                            | hasFocus = False
+                        }
+                    )
+
+        -- TextInput.OnInputKeyPress keyCode ->
+        --     if keyCode == 9 then
+        --         handleKeyPress newModel props keyCode
+        --
+        --     else
+        --         ( newModel, cmd, ( props.value, props.inputValue ) )
+        _ ->
+            result
+
+
+handleTextInputUpdate : Model -> Props a -> TextInput.TextInputResult -> SuperSelectResult a
+handleTextInputUpdate model props textInputResult =
+    textInputResult
+        |> CR.mapModel (\textInputData -> { model | textInputData = textInputData })
+        |> CR.mapMsg TextInputMsg
+        |> CR.applyExternalMsg (handleTextInputMsg props)
+
+
 {-| Update
 The function for updating the element.
 -}
-update : Msg a -> Model -> Props a -> ( Model, Cmd (Msg a), ( Maybe a, String ) )
+update : Msg a -> Model -> Props a -> SuperSelectResult a
 update msg model props =
     case msg of
         TextInputMsg textInputMsg ->
             TextInput.update textInputMsg model.textInputData
-                |> (\( data, cmd ) ->
-                        ( { model | textInputData = data }
-                        , Cmd.map TextInputMsg cmd
-                        )
-                   )
-                |> (\( newModel, cmd ) ->
-                        case textInputMsg of
-                            TextInput.OnInput value ->
-                                ( newModel
-                                , cmd
-                                , ( Nothing, value )
-                                )
-
-                            TextInput.OnFocus ->
-                                ( { newModel
-                                    | focusedOption = Nothing
-                                    , hasFocus = True
-                                  }
-                                , cmd
-                                , ( props.value, props.inputValue )
-                                )
-
-                            TextInput.OnBlur ->
-                                let
-                                    inputValue =
-                                        if props.value == Nothing then
-                                            ""
-
-                                        else
-                                            props.inputValue
-                                in
-                                ( { newModel
-                                    | hasFocus = False
-                                  }
-                                , Cmd.none
-                                , ( props.value, inputValue )
-                                )
-
-                            TextInput.OnInputKeyPress keyCode ->
-                                if keyCode == 9 then
-                                    handleKeyPress newModel props keyCode
-
-                                else
-                                    ( newModel, cmd, ( props.value, props.inputValue ) )
-
-                            _ ->
-                                ( newModel, cmd, ( props.value, props.inputValue ) )
-                   )
+                |> handleTextInputUpdate model props
 
         Clear ->
-            ( model, Cmd.none, ( Nothing, "" ) )
+            CR.withModel model
+                |> CR.withExternalMsg (ValueChanged Nothing)
 
         SetFocusedOption optionIndex ->
-            ( { model
-                | focusedOption = Just optionIndex
-              }
-            , Cmd.none
-            , ( props.value, props.inputValue )
-            )
+            CR.withModel { model | focusedOption = Just optionIndex }
 
         UnsetFocusedOption ->
-            ( { model | focusedOption = Nothing }, Cmd.none, ( props.value, props.inputValue ) )
+            CR.withModel { model | focusedOption = Nothing }
 
         OptionSelected ( label, value ) ->
-            ( { model
-                | focusedOption = Nothing
-              }
-            , Cmd.none
-            , ( Just value, label )
-            )
+            CR.withModel { model | focusedOption = Nothing }
+                |> CR.withExternalMsg (ValueChanged (Just ( label, value )))
 
-        KeyPress superSelectProps keyCode ->
-            if model.hasFocus then
-                handleKeyPress model superSelectProps keyCode
-
-            else
-                ( model, Cmd.none, ( props.value, props.inputValue ) )
-
+        -- KeyPress superSelectProps keyCode ->
+        --     if model.hasFocus then
+        --         handleKeyPress model superSelectProps keyCode
+        --
+        --     else
+        --         ( model, Cmd.none, ( props.value, props.inputValue ) )
         NoOp ->
-            ( model, Cmd.none, ( props.value, props.inputValue ) )
+            CR.withModel model
+
+        _ ->
+            CR.withModel model
 
 
 textInputSettings : Model -> Props a -> TextInput.Props
