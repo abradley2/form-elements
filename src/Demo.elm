@@ -136,9 +136,6 @@ update msg model =
                         case extMsg of
                             TextInput.ValueChanged newVal ->
                                 result |> CR.mapModel (\m -> { m | message = newVal })
-
-                            _ ->
-                                result
                     )
                 |> CR.resolve
 

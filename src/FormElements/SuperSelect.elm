@@ -257,25 +257,15 @@ handleKeyPress model props keyCode =
     ( updateModel, Cmd.none, updateValue )
 
 
-handleTextInputMsg : Props a -> TextInput.ExternMsg -> SuperSelectResult a -> SuperSelectResult a
-handleTextInputMsg props textInputMsg result =
+handleTextInputInternal props textInputMsg model =
     case textInputMsg of
-        TextInput.Internal (TextInput.OnInput value) ->
-            result
-                |> CR.applyExternalMsg (\ext res -> res)
-                |> CR.withExternalMsg (ValueChanged value Nothing)
+        TextInput.OnFocus ->
+            { model
+                | focusedOption = Nothing
+                , hasFocus = True
+            }
 
-        TextInput.Internal TextInput.OnFocus ->
-            result
-                |> CR.mapModel
-                    (\model ->
-                        { model
-                            | focusedOption = Nothing
-                            , hasFocus = True
-                        }
-                    )
-
-        TextInput.Internal TextInput.OnBlur ->
+        TextInput.OnBlur ->
             let
                 inputValue =
                     if props.value == Nothing then
@@ -284,28 +274,37 @@ handleTextInputMsg props textInputMsg result =
                     else
                         props.inputValue
             in
-            result
-                |> CR.mapModel
-                    (\model ->
-                        { model
-                            | hasFocus = False
-                        }
-                    )
+            { model
+                | hasFocus = False
+            }
 
-        -- TextInput.OnInputKeyPress keyCode ->
-        --     if keyCode == 9 then
-        --         handleKeyPress newModel props keyCode
-        --
-        --     else
-        --         ( newModel, cmd, ( props.value, props.inputValue ) )
         _ ->
+            model
+
+
+handleTextInputMsg : Props a -> TextInput.ExternalMsg -> SuperSelectResult a -> SuperSelectResult a
+handleTextInputMsg props textInputMsg result =
+    case textInputMsg of
+        TextInput.ValueChanged value ->
             result
+                |> CR.applyExternalMsg (\ext res -> res)
+                |> CR.withExternalMsg (ValueChanged value Nothing)
 
 
-handleTextInputUpdate : Model -> Props a -> TextInput.TextInputResult -> SuperSelectResult a
-handleTextInputUpdate model props textInputResult =
+
+-- TextInput.OnInputKeyPress keyCode ->
+--     if keyCode == 9 then
+--         handleKeyPress newModel props keyCode
+--
+--     else
+--         ( newModel, cmd, ( props.value, props.inputValue ) )
+
+
+handleTextInputUpdate : Model -> Props a -> TextInput.Msg -> TextInput.TextInputResult -> SuperSelectResult a
+handleTextInputUpdate model props textInputMsg textInputResult =
     textInputResult
         |> CR.mapModel (\textInputData -> { model | textInputData = textInputData })
+        |> CR.mapModel (handleTextInputInternal props textInputMsg)
         |> CR.mapMsg TextInputMsg
         |> CR.applyExternalMsg (handleTextInputMsg props)
 
@@ -318,7 +317,7 @@ update msg model props =
     case msg of
         TextInputMsg textInputMsg ->
             TextInput.update textInputMsg model.textInputData
-                |> handleTextInputUpdate model props
+                |> handleTextInputUpdate model props textInputMsg
 
         Clear ->
             CR.withModel model

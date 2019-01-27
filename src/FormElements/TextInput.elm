@@ -1,6 +1,6 @@
 module FormElements.TextInput exposing
     ( view, init, update, defaultProps, Msg(..), Model, Props
-    , ExternMsg(..), TextInputResult
+    , ExternalMsg(..), TextInputResult
     )
 
 {-| A text input widget for Elm
@@ -21,7 +21,7 @@ import Maybe as M
 
 
 type alias TextInputResult =
-    CR.ComponentResult Model Msg ExternMsg Never
+    CR.ComponentResult Model Msg ExternalMsg Never
 
 
 {-| Msg
@@ -37,14 +37,13 @@ type Msg
     | OnInputKeyPress Int
 
 
-{-| ExternMsg
+{-| ExternalMsg
 
   - `ValueChanged String`
 
 -}
-type ExternMsg
+type ExternalMsg
     = ValueChanged String
-    | Internal Msg
 
 
 {-| Model
