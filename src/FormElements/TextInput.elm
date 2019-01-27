@@ -1,14 +1,11 @@
-module FormElements.TextInput exposing
-    ( view, init, update, defaultProps, Msg(..), Model, Props
-    , ExternalMsg(..), TextInputResult
-    )
+module FormElements.TextInput exposing (view, init, update, defaultProps, Msg(..), Model, Props, TextInputResult, ExternalMsg(..))
 
 {-| A text input widget for Elm
 
 
 # TEA
 
-@docs view, init, update, defaultProps, Msg, Model, Props
+@docs view, init, update, defaultProps, Msg, Model, Props, TextInputResult, ExternalMsg
 
 -}
 
@@ -20,6 +17,8 @@ import Json.Decode
 import Maybe as M
 
 
+{-| Type alias for the [Component Result](https://package.elm-lang.org/packages/z5h/component-result/latest/) of this elements
+-}
 type alias TextInputResult =
     CR.ComponentResult Model Msg ExternalMsg Never
 

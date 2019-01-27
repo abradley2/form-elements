@@ -1,14 +1,11 @@
-module FormElements.SuperSelect exposing
-    ( view, init, update, subscriptions, defaultProps, Msg(..), Model, Props, Option
-    , ExternalMsg(..)
-    )
+module FormElements.SuperSelect exposing (view, init, update, subscriptions, defaultProps, Msg(..), Model, Props, Option, SuperSelectResult, ExternalMsg(..))
 
 {-| A "select" control that uses auto-complete to assist users.
 
 
 # Definitions
 
-@docs view, init, update, subscriptions, defaultProps, Msg, Model, Props, Option
+@docs view, init, update, subscriptions, defaultProps, Msg, Model, Props, Option, SuperSelectResult, ExternalMsg
 
 -}
 

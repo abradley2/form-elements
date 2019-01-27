@@ -1,17 +1,20 @@
 module FormElements.Switch exposing (view)
 
+{-| A simple on/off switch. Use for cases where the user has one option out of a binary selection
+
+
+# Definitions
+
+@docs view
+
+-}
+
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
 
-{-| A simple on/off switch. Use for cases where the user has one option out of a binary selection
-
-
-# TEA
-
-@docs view
-
+{-| The view function for displaying the element.
 -}
 view : Bool -> String -> (Bool -> a) -> Html a
 view isOn label onSwitch =
