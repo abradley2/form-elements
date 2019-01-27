@@ -1,4 +1,7 @@
-module FormElements.SuperSelect exposing (view, init, update, subscriptions, defaultProps, Msg(..), Model, Props, Option)
+module FormElements.SuperSelect exposing
+    ( view, init, update, subscriptions, defaultProps, Msg(..), Model, Props, Option
+    , ExternalMsg(..)
+    )
 
 {-| A super select widget for Elm
 
@@ -57,12 +60,12 @@ type alias Option a =
     ( String, a )
 
 
-type ExternMsg a
-    = ValueChanged (Maybe (Option a))
+type ExternalMsg a
+    = ValueChanged String (Maybe a)
 
 
 type alias SuperSelectResult a =
-    CR.ComponentResult Model (Msg a) (ExternMsg a) Never
+    CR.ComponentResult Model (Msg a) (ExternalMsg a) Never
 
 
 {-|
@@ -259,6 +262,8 @@ handleTextInputMsg props textInputMsg result =
     case textInputMsg of
         TextInput.Internal (TextInput.OnInput value) ->
             result
+                |> CR.applyExternalMsg (\ext res -> res)
+                |> CR.withExternalMsg (ValueChanged value Nothing)
 
         TextInput.Internal TextInput.OnFocus ->
             result
@@ -317,7 +322,7 @@ update msg model props =
 
         Clear ->
             CR.withModel model
-                |> CR.withExternalMsg (ValueChanged Nothing)
+                |> CR.withExternalMsg (ValueChanged "" Nothing)
 
         SetFocusedOption optionIndex ->
             CR.withModel { model | focusedOption = Just optionIndex }
@@ -327,7 +332,7 @@ update msg model props =
 
         OptionSelected ( label, value ) ->
             CR.withModel { model | focusedOption = Nothing }
-                |> CR.withExternalMsg (ValueChanged (Just ( label, value )))
+                |> CR.withExternalMsg (ValueChanged label (Just value))
 
         -- KeyPress superSelectProps keyCode ->
         --     if model.hasFocus then

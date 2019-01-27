@@ -15,6 +15,7 @@ module Demo exposing
     )
 
 import Browser
+import ComponentResult as CR
 import Dict
 import FormElements.CheckBox as CheckBox
 import FormElements.RadioButton as RadioButton
@@ -127,42 +128,38 @@ update msg model =
             ( model, Cmd.none )
 
         TextInputMsg textInputMsg ->
-            let
-                ( textInputData, textInputCmd ) =
-                    TextInput.update textInputMsg model.textInputData
+            TextInput.update textInputMsg model.textInputData
+                |> CR.mapMsg TextInputMsg
+                |> CR.mapModel (\textInputData -> { model | textInputData = textInputData })
+                |> CR.applyExternalMsg
+                    (\extMsg result ->
+                        case extMsg of
+                            TextInput.ValueChanged newVal ->
+                                result |> CR.mapModel (\m -> { m | message = newVal })
 
-                updatedModel =
-                    { model | textInputData = textInputData }
-
-                cmd =
-                    Cmd.map TextInputMsg textInputCmd
-            in
-            case textInputMsg of
-                TextInput.OnInput value ->
-                    ( { updatedModel | message = value }, cmd )
-
-                _ ->
-                    ( updatedModel, cmd )
+                            _ ->
+                                result
+                    )
+                |> CR.resolve
 
         SuperSelectMsg superSelectMsg ->
-            let
-                ( superSelectData, superSelectCmd, ( selected, inputValue ) ) =
-                    SuperSelect.update
-                        superSelectMsg
-                        model.superSelectData
-                        (superSelectSettings model)
-
-                updatedModel =
-                    { model
-                        | superSelectData = superSelectData
-                        , selected = selected
-                        , superSelectText = inputValue
-                    }
-
-                cmd =
-                    Cmd.map SuperSelectMsg superSelectCmd
-            in
-            ( updatedModel, cmd )
+            SuperSelect.update superSelectMsg model.superSelectData (superSelectSettings model)
+                |> CR.mapMsg SuperSelectMsg
+                |> CR.mapModel (\superSelectData -> { model | superSelectData = superSelectData })
+                |> CR.applyExternalMsg
+                    (\extMsg result ->
+                        case extMsg of
+                            SuperSelect.ValueChanged textInputValue selectedOption ->
+                                result
+                                    |> CR.mapModel
+                                        (\m ->
+                                            { m
+                                                | selected = selectedOption
+                                                , superSelectText = textInputValue
+                                            }
+                                        )
+                    )
+                |> CR.resolve
 
         SelectChamber chamber ->
             ( { model | chamber = chamber }, Cmd.none )
