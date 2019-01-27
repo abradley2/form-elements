@@ -60,14 +60,7 @@ type FieldType
     | Filled
 
 
-{-| Props
-
-  - `id` Unique id for the elements
-  - `label` Label for the text input
-  - `value` The value of the text input
-  - `errorText` Set this to a string when there is a validation error to display to the user. Will override `helperText`
-  - `helperText` Helpful text displayed under the text input
-
+{-| Configurable properties used to display and control some of the element's behavior
 -}
 type alias Props =
     { id : String
@@ -79,9 +72,7 @@ type alias Props =
     }
 
 
-{-| defaultProps
-Default props for the text input. Generally the label should be set before passing
-these defaults to the `view`
+{-| Useful default props to extend off when supplying props to the element.
 -}
 defaultProps : Props
 defaultProps =
@@ -94,8 +85,7 @@ defaultProps =
     }
 
 
-{-| init
-Initialization for the text input model. The `id` passed in _must be unique_
+{-| Initialization for the text input model. The `id` passed in _must be unique_
 -}
 init : String -> ( Model, Cmd Msg )
 init id =
@@ -106,8 +96,7 @@ init id =
     )
 
 
-{-| update
-The update function for the text input element
+{-| The main update function for the text input element
 -}
 update : Msg -> Model -> TextInputResult
 update msg model =
@@ -205,8 +194,7 @@ bottomText model props =
             (getBottomTextData props)
 
 
-{-| view
-The view function for displaying the text input element
+{-| The view function for displaying the text input element
 -}
 view : Model -> Props -> Html Msg
 view model props =

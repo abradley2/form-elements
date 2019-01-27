@@ -1,9 +1,9 @@
 module FormElements.CheckBox exposing (view)
 
-{-| A text input widget for Elm
+{-| A simple checkbox
 
 
-# TEA
+# Definitions
 
 @docs view
 
@@ -14,8 +14,8 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
 
-{-| view
-Renders a checkbox
+{-| Renders a checkbox. The first argument is whether or not it is selected.
+The second argument represents the label.
 -}
 view : Bool -> String -> (Bool -> a) -> Html a
 view selected label handleClick =

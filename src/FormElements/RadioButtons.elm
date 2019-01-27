@@ -1,9 +1,9 @@
-module FormElements.RadioButton exposing (view, Props)
+module FormElements.RadioButtons exposing (view, Props)
 
-{-| A text input widget for Elm
+{-| A group of radio buttons
 
 
-# TEA
+# Definitions
 
 @docs view, Props
 
@@ -15,8 +15,7 @@ import Html.Events exposing (..)
 import Task
 
 
-{-| Props
-Properties for rendering the view
+{-| Configurable properties for rendering the view
 -}
 type alias Props x y =
     { selected : x
@@ -68,8 +67,7 @@ radioButtonView onSelect selected ( label, val ) =
         ]
 
 
-{-| view
-View for displaying the radio button group
+{-| Renders the radio button group
 -}
 view : Props x y -> Html y
 view props =

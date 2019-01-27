@@ -18,7 +18,7 @@ import Browser
 import ComponentResult as CR
 import Dict
 import FormElements.CheckBox as CheckBox
-import FormElements.RadioButton as RadioButton
+import FormElements.RadioButtons as RadioButtons
 import FormElements.SuperSelect as SuperSelect
 import FormElements.Switch as Switch
 import FormElements.TextInput as TextInput
@@ -276,7 +276,7 @@ view model =
             [ style "max-width" "320px"
             , style "margin-top" "48px"
             ]
-            [ RadioButton.view
+            [ RadioButtons.view
                 { options =
                     [ ( "Senate", Senate )
                     , ( "House", House )

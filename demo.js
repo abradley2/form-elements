@@ -10600,7 +10600,7 @@ var abradley2$form_elements$Demo$textInputSettings = function (model) {
 			value: model.message
 		});
 };
-var abradley2$form_elements$FormElements$RadioButton$radioButtonView = F3(
+var abradley2$form_elements$FormElements$RadioButtons$radioButtonView = F3(
 	function (onSelect, selected, _n0) {
 		var label = _n0.a;
 		var val = _n0.b;
@@ -10684,7 +10684,7 @@ var abradley2$form_elements$FormElements$RadioButton$radioButtonView = F3(
 						]))
 				]));
 	});
-var abradley2$form_elements$FormElements$RadioButton$view = function (props) {
+var abradley2$form_elements$FormElements$RadioButtons$view = function (props) {
 	return A2(
 		elm$html$Html$div,
 		_List_Nil,
@@ -10696,7 +10696,7 @@ var abradley2$form_elements$FormElements$RadioButton$view = function (props) {
 				var val = _n0.b;
 				var selected = _Utils_eq(val, props.selected);
 				return A3(
-					abradley2$form_elements$FormElements$RadioButton$radioButtonView,
+					abradley2$form_elements$FormElements$RadioButtons$radioButtonView,
 					props.onSelect,
 					selected,
 					_Utils_Tuple2(label, val));
@@ -11278,7 +11278,7 @@ var abradley2$form_elements$Demo$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						abradley2$form_elements$FormElements$RadioButton$view(
+						abradley2$form_elements$FormElements$RadioButtons$view(
 						{
 							onSelect: abradley2$form_elements$Demo$SelectChamber,
 							options: _List_fromArray(

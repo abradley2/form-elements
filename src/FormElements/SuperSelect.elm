@@ -3,10 +3,10 @@ module FormElements.SuperSelect exposing
     , ExternalMsg(..)
     )
 
-{-| A super select widget for Elm
+{-| A "select" control that uses auto-complete to assist users.
 
 
-# TEA
+# Definitions
 
 @docs view, init, update, subscriptions, defaultProps, Msg, Model, Props, Option
 
@@ -37,13 +37,7 @@ type Msg a
     | KeyPress (Props a) Int
 
 
-{-| model
-
-  - `id` The unique id of the element. This is passed as the first argument to `init`
-  - `value` The currently selected option
-  - `inputValue` The text input value for the underlying `TextInput` element
-  - `textInputData` Key for allocating the model of the underlying `TextInput` element
-
+{-| The model the element uses to render itself.
 -}
 type alias Model =
     { id : String
@@ -53,27 +47,25 @@ type alias Model =
     }
 
 
-{-| Option
-Option for the select menu
+{-| An "option" for the menu. Each option has a label, and an associated value of whatever type.
 -}
 type alias Option a =
     ( String, a )
 
 
+{-| The external message type for the [Component Result](https://package.elm-lang.org/packages/z5h/component-result/latest/)
+-}
 type ExternalMsg a
     = ValueChanged String (Maybe a)
 
 
+{-| Alias for the element's [Component Result](https://package.elm-lang.org/packages/z5h/component-result/latest/) type.
+-}
 type alias SuperSelectResult a =
     CR.ComponentResult Model (Msg a) (ExternalMsg a) Never
 
 
-{-|
-
-  - `errorText` If you wish to communicate the selection as invalid, set it to the error message
-  - `helperText` Helper text to guide the user's input. Not shown if `errorText` is set to non-`Nothing`
-  - `label` input label for the text input
-
+{-| Configurable properties for rendering the view
 -}
 type alias Props a =
     { id : String
@@ -120,7 +112,9 @@ isRelevantKey keyCode =
 
 {-| subscriptions
 As this element requires listening to keyboard events, the subscriptions must be added
-to your main function so it may do so.
+to your main function so it may do so. For each instance of this element in your application,
+wire up the subscriptions along with the associated `Props` you would give to that instance's `view`
+function
 -}
 subscriptions : Props a -> Sub (Msg a)
 subscriptions superSelectProps =
@@ -139,11 +133,7 @@ subscriptions superSelectProps =
         ]
 
 
-{-| Init
-Creates the initial model for the element. `id` should be a _unique_ string identifier.
-The second argument are the `Option` records since these are often initially decided.
-If you are loading the options asynchronously as a response to user input, the options
-should be set via a `setNewOptions` in your update function.
+{-| Creates the initial model for the element. `id` should be a _unique_ string identifier.
 -}
 init : String -> ( Model, Cmd (Msg a) )
 init id =
@@ -274,15 +264,6 @@ handleTextInputMsg props textInputMsg result =
                 |> CR.withExternalMsg (ValueChanged value Nothing)
 
 
-
--- TextInput.OnInputKeyPress keyCode ->
---     if keyCode == 9 then
---         handleKeyPress newModel props keyCode
---
---     else
---         ( newModel, cmd, ( props.value, props.inputValue ) )
-
-
 handleTextInputUpdate : Model -> Props a -> TextInput.Msg -> TextInput.TextInputResult -> SuperSelectResult a
 handleTextInputUpdate model props textInputMsg textInputResult =
     textInputResult
@@ -292,8 +273,7 @@ handleTextInputUpdate model props textInputMsg textInputResult =
         |> CR.applyExternalMsg (handleTextInputMsg props)
 
 
-{-| Update
-The function for updating the element.
+{-| The main function for updating the element in response to `Msg`
 -}
 update : Msg a -> Model -> Props a -> SuperSelectResult a
 update msg model props =
@@ -463,8 +443,7 @@ optionList model props =
             ]
 
 
-{-| View
-The view for displaying the element.
+{-| The view for displaying the element.
 -}
 view : Model -> Props a -> Html (Msg a)
 view model props =
