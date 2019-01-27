@@ -5561,7 +5561,7 @@ var abradley2$form_elements$FormElements$SuperSelect$isRelevantKey = function (k
 					return _Utils_eq(k, keyCode);
 				},
 				_List_fromArray(
-					[38, 40, 13]))));
+					[38, 40, 13, 9]))));
 };
 var elm$browser$Browser$Events$Document = {$: 'Document'};
 var elm$browser$Browser$Events$MySub = F3(
