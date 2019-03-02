@@ -1,11 +1,11 @@
-module FormElements.CheckBox exposing (view)
+module FormElements.CheckBox exposing (view, Props)
 
 {-| A simple checkbox
 
 
 # Definitions
 
-@docs view
+@docs view, Props
 
 -}
 
@@ -14,14 +14,22 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
 
-{-| Renders a checkbox. The first argument is whether or not it is selected.
-The second argument represents the label.
+{-| Configurable properties for rendering the view
 -}
-view : Bool -> String -> (Bool -> a) -> Html a
-view selected label handleClick =
+type alias Props a =
+    { selected : Bool
+    , label : String
+    , handleToggle : Bool -> a
+    }
+
+
+{-| The view for displaying the element.
+-}
+view : Props a -> Html a
+view props =
     div []
         [ Html.label
-            [ for ("radio-btn-" ++ label)
+            [ for ("radio-btn-" ++ props.label)
             , class "erb-container"
             ]
             [ div
@@ -30,7 +38,7 @@ view selected label handleClick =
                 [ div
                     [ classList
                         [ ( "erb-square-group__outer", True )
-                        , ( "erb-square-group__outer--selected", selected )
+                        , ( "erb-square-group__outer--selected", props.selected )
                         ]
                     ]
                     [ div
@@ -48,14 +56,14 @@ view selected label handleClick =
                 ]
             , div
                 []
-                [ text label ]
+                [ text props.label ]
             ]
         , div
             [ class "erb-hidden-checkbox" ]
             [ input
-                [ id ("radio-btn-" ++ label)
+                [ id ("radio-btn-" ++ props.label)
                 , type_ "checkbox"
-                , onCheck handleClick
+                , onCheck props.handleToggle
                 ]
                 []
             ]

@@ -67,7 +67,7 @@ radioButtonView onSelect selected ( label, val ) =
         ]
 
 
-{-| Renders the radio button group
+{-| The view for displaying the element.
 -}
 view : Props x y -> Html y
 view props =

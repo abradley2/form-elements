@@ -82,10 +82,10 @@ type alias Flags =
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     let
-        ( textInputData, textInputCmd ) =
+        textInputData =
             TextInput.init textInputId
 
-        ( superSelectData, superSelectCmd ) =
+        superSelectData =
             SuperSelect.init superSelectId
     in
     ( { switchToggled = False
@@ -107,10 +107,7 @@ init flags =
             , ( Delta, "delta", False )
             ]
       }
-    , Cmd.batch
-        [ Cmd.map TextInputMsg textInputCmd
-        , Cmd.map SuperSelectMsg superSelectCmd
-        ]
+    , Cmd.none
     )
 
 
@@ -224,10 +221,11 @@ superSelectSettings model =
 
 checkboxOption : ( CheckboxOption, String, Bool ) -> Html Msg
 checkboxOption ( val, label, isChecked ) =
-    CheckBox.view
-        isChecked
-        label
-        (CheckboxToggled val)
+    CheckBox.view <|
+        { selected = isChecked
+        , label = label
+        , handleToggle = CheckboxToggled val
+        }
 
 
 view : Model -> Html Msg
@@ -243,16 +241,17 @@ view model =
             , style "margin-top" "48px"
             ]
             [ Switch.view
-                model.switchToggled
-                ("Developer Mode "
-                    ++ (if model.switchToggled then
-                            "(On)"
+                { isOn = model.switchToggled
+                , label =
+                    "Developer Mode "
+                        ++ (if model.switchToggled then
+                                "(On)"
 
-                        else
-                            "(Off)"
-                       )
-                )
-                ToggleSwitch
+                            else
+                                "(Off)"
+                           )
+                , handleToggle = ToggleSwitch
+                }
             ]
         , div
             [ style "max-width" "320px"

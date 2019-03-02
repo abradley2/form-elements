@@ -59,7 +59,7 @@ type FieldType
     | Filled
 
 
-{-| Configurable properties used to display and control some of the element's behavior
+{-| Configurable properties for rendering the view
 -}
 type alias Props =
     { id : String
@@ -86,13 +86,11 @@ defaultProps =
 
 {-| Initialization for the text input model. The `id` passed in _must be unique_
 -}
-init : String -> ( Model, Cmd Msg )
+init : String -> Model
 init id =
-    ( { id = id
-      , hasFocus = False
-      }
-    , Cmd.none
-    )
+    { id = id
+    , hasFocus = False
+    }
 
 
 {-| The main update function for the text input element
@@ -193,7 +191,7 @@ bottomText model props =
             (getBottomTextData props)
 
 
-{-| The view function for displaying the text input element
+{-| The view for displaying the element.
 -}
 view : Model -> Props -> Html Msg
 view model props =

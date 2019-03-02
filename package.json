@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
-    "stylus": "^0.54.5"
+    "stylus": "^0.54.5",
+    "uglify-js": "^3.4.9"
   }
 }

@@ -132,19 +132,17 @@ subscriptions superSelectProps =
 
 {-| Creates the initial model for the element. `id` should be a _unique_ string identifier.
 -}
-init : String -> ( Model, Cmd (Msg a) )
+init : String -> Model
 init id =
     let
-        ( textInputData, textInputCmd ) =
+        textInputData =
             TextInput.init <| textInputId id
     in
-    ( { id = id
-      , textInputData = textInputData
-      , focusedOption = Nothing
-      , hasFocus = False
-      }
-    , Cmd.map TextInputMsg textInputCmd
-    )
+    { id = id
+    , textInputData = textInputData
+    , focusedOption = Nothing
+    , hasFocus = False
+    }
 
 
 getFocusedOption : Model -> Props a -> Maybe (Option a)
