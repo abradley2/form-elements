@@ -1,8 +1,10 @@
-primary-color = #60b5cd
+theme = json('../theme.json', { hash: true })
 
-font-color = #293c4b
-label-color = rgba(0, 0, 0, 0.54)
-error-color = #B00020
+primary-color = theme['primary-color']
+secondary-color = theme['secondary-color']
+font-color = theme['font-color']
+label-color = theme['label-color']
+error-color = theme['error-color']
+light-shade = theme['light-shade']
+medium-shade = theme['medium-shade']
 
-light-shade = rgba(0, 0, 0, 0.08)
-medium-shade = rgba(0, 0, 0, 0.16)

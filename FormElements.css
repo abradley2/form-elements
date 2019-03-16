@@ -3,7 +3,7 @@
   background-color: rgba(0,0,0,0.08);
   max-width: 280px;
   margin-bottom: 16px;
-  height: 56px;
+  height: 48px;
   display: flex;
   align-items: center;
   cursor: text;
@@ -19,17 +19,20 @@
   box-shadow: 0px 0px 0px 1px #60b5cd;
 }
 .eti-container .eti-text-input__wrapper {
-  display: inline-block;
+  display: flex;
+  width: 100%;
 }
 .eti-container .eti-text-input__input {
   background-color: transparent;
   border: none;
   outline: none;
   font-size: 16px;
-  height: calc(56px - 8px);
+  height: calc(48px - 8px);
   padding: 8px 8px 0px 8px;
+  width: 100%;
 }
 .eti-container .eti-text-input__label {
+  line-height: 1.15;
   position: absolute;
   top: 4px;
   font-size: 16px;
@@ -40,7 +43,7 @@
   color: rgba(0,0,0,0.54);
 }
 .eti-container .eti-text-input__label--raised {
-  top: calc(0% + 4px);
+  top: 2px;
   font-size: 12px;
 }
 .eti-container .eti-text-input__label--active {
@@ -74,7 +77,8 @@
   font-size: 12px;
   padding-left: 8px;
   position: absolute;
-  top: 60px;
+  top: 52px;
+  line-height: 1.15;
 }
 .eti-container .eti-bottom-text--error {
   color: #b00020;
@@ -90,7 +94,7 @@
   background-color: #fff;
   opacity: 1;
   position: absolute;
-  top: 56px;
+  top: 46px;
   max-height: 0px;
   overflow: auto;
 }
@@ -143,6 +147,7 @@
 }
 .ess-container .ess-option-list__word {
   color: rgba(0,0,0,0.54);
+  line-height: 1.15;
 }
 .ess-container .ess-option-list__word--match {
   color: #293c4b;
@@ -199,6 +204,9 @@
   transition: 0.25s;
   color: #fff;
 }
+.erb-square-group__inner {
+  line-height: 1;
+}
 .erb-circle-group__outer--selected {
   border: solid 3px #60b5cd;
 }
@@ -221,9 +229,11 @@
 }
 .elm-switch-container {
   display: inline-block;
+  line-height: 1.15;
 }
 .elm-switch-container .elm-switch__label {
   color: rgba(0,0,0,0.54);
+  line-height: 1.15;
   font-size: 12px;
 }
 .elm-switch-container .elm-switch__label--toggled {
@@ -233,11 +243,11 @@
   display: inline-block;
   width: 80px;
   height: 40px;
+  margin: 4px 0px;
   cursor: pointer;
   border: solid 1px rgba(0,0,0,0.54);
   border-color: rgba(0,0,0,0.54);
   border-radius: 3px;
-  margin: 1px;
   position: relative;
   transition: 0.25s;
   background-color: rgba(0,0,0,0.08);
@@ -265,5 +275,240 @@
 .elm-switch-container .elm-switch .elm-switch__switch-indicator--toggled {
   left: 38px;
   color: #60b5cd;
-  border: solid 3px secondary-color;
+  border: solid 3px #293c4b;
+}
+._datepicker_container {
+  display: inline-block;
+}
+._datepicker_yearmonthheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  padding: 0px 8px;
+  height: 36px;
+}
+._datepicker_yearmonthheader__monthchange {
+  cursor: pointer;
+  appearance: none;
+  background: none;
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  width: 18px;
+  height: 18px;
+}
+._datepicker_yearmonthheader__monthchange:focus {
+  outline: none;
+}
+._datepicker_yearmonthheader__monthchange--next {
+  border-right: 2px solid #60b5cd;
+  border-bottom: 2px solid #60b5cd;
+  transform: rotate(-45deg);
+}
+._datepicker_yearmonthheader__monthchange--previous {
+  border-left: 2px solid #60b5cd;
+  border-top: 2px solid #60b5cd;
+  transform: rotate(-45deg);
+}
+._datepicker_weekheader {
+  display: inline-block;
+}
+._datepicker_weekheader__day {
+  user-select: none;
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
+  padding: 0px;
+  width: 36px;
+}
+._datepicker_monthcontainer {
+  position: relative;
+  width: 253px;
+  height: 217px;
+  overflow: hidden;
+}
+._datepicker_month {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 253px;
+  box-sizing: border-box;
+  display: inline-block;
+  border-top: 1px solid rgba(0,0,0,0.16);
+  border-left: 1px solid rgba(0,0,0,0.16);
+  animation-duration: 0.33s;
+  animation-fill-mode: forwards;
+}
+._datepicker_month--slideinright {
+  animation-name: slideinright;
+}
+._datepicker_month--slideoutright {
+  animation-name: slideoutright;
+}
+._datepicker_month--slideinleft {
+  animation-name: slideinleft;
+}
+._datepicker_month--slideoutleft {
+  animation-name: slideoutleft;
+}
+._datepicker_week {
+  display: inline-block;
+}
+._datepicker_day {
+  cursor: pointer;
+  appearance: none;
+  background: none;
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  user-select: none;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  width: 36px;
+  height: 36px;
+  font-size: 12px;
+  box-sizing: border-box;
+  border-right: 1px solid rgba(0,0,0,0.16);
+  border-bottom: 1px solid rgba(0,0,0,0.16);
+  font-weight: bold;
+}
+._datepicker_day:focus {
+  outline: none;
+}
+._datepicker_day--empty {
+  cursor: default;
+}
+._datepicker_day:hover:not(._datepicker_day--empty) {
+  background-color: #60b5cd;
+  color: #fff;
+}
+@-moz-keyframes slideinright {
+  from {
+    transform: translateX(-253px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@-webkit-keyframes slideinright {
+  from {
+    transform: translateX(-253px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@-o-keyframes slideinright {
+  from {
+    transform: translateX(-253px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slideinright {
+  from {
+    transform: translateX(-253px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@-moz-keyframes slideoutright {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(253px);
+  }
+}
+@-webkit-keyframes slideoutright {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(253px);
+  }
+}
+@-o-keyframes slideoutright {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(253px);
+  }
+}
+@keyframes slideoutright {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(253px);
+  }
+}
+@-moz-keyframes slideinleft {
+  from {
+    transform: translateX(253px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@-webkit-keyframes slideinleft {
+  from {
+    transform: translateX(253px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@-o-keyframes slideinleft {
+  from {
+    transform: translateX(253px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slideinleft {
+  from {
+    transform: translateX(253px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@-moz-keyframes slideoutleft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-253px);
+  }
+}
+@-webkit-keyframes slideoutleft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-253px);
+  }
+}
+@-o-keyframes slideoutleft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-253px);
+  }
+}
+@keyframes slideoutleft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-253px);
+  }
 }

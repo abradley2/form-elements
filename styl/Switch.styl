@@ -1,7 +1,9 @@
 .elm-switch-container
     display inline-block
+    line-height 1.15
     .elm-switch__label
         color label-color
+        line-height 1.15
         font-size 12px
     .elm-switch__label--toggled
         color primary-color
@@ -10,11 +12,11 @@
         display inline-block
         width 80px
         height 40px
+        margin 4px 0px // want this to align with our "height 48px" inputs
         cursor pointer
         border solid 1px label-color
         border-color label-color
         border-radius 3px
-        margin 1px
         position relative
         transition .25s
         background-color light-shade

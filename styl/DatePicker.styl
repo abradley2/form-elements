@@ -1,0 +1,120 @@
+daySize = 36px
+monthWidth = daySize * 7 + 1px
+monthHeight = daySize * 6 + 1px
+
+@keyframes slideinright
+  from
+    transform translateX(monthWidth * -1)
+  to
+    transform translateX(0)
+
+@keyframes slideoutright
+  from
+    transform translateX(0)
+  to
+    transform translateX(monthWidth)
+
+@keyframes slideinleft
+  from
+    transform translateX(monthWidth)
+  to
+    transform translateX(0)
+
+@keyframes slideoutleft
+  from
+    transform translateX(0)
+  to
+    transform translateX(monthWidth * -1)
+
+buttonReset()
+  cursor pointer
+  appearance none
+  background none
+  padding 0px
+  margin 0px
+  border none
+  &:focus
+    outline none
+
+._datepicker_
+  &container
+    display inline-block
+
+
+  &yearmonthheader
+    display flex
+    justify-content space-between
+    align-items center
+    margin-bottom 4px
+    padding 0px 8px
+    height daySize
+    &__monthchange
+      buttonReset()
+      width 18px
+      height 18px
+      &--next
+        border-right 2px solid primary-color
+        border-bottom 2px solid primary-color
+        transform rotate(-45deg)
+      &--previous
+        border-left 2px solid primary-color
+        border-top 2px solid primary-color
+        transform rotate(-45deg)
+
+  &weekheader
+    display inline-block
+    &__day
+      user-select none
+      display inline-block
+      text-align center
+      font-size 12px
+      padding 0px
+      width daySize
+
+  &monthcontainer
+    position relative
+    width monthWidth
+    height monthHeight
+    overflow hidden
+
+  &month
+    position absolute
+    left 0px
+    top 0px
+    width monthWidth
+    box-sizing border-box
+    display inline-block
+    border-top 1px solid medium-shade
+    border-left 1px solid medium-shade
+    animation-duration .33s
+    animation-fill-mode forwards
+    &--slideinright
+      animation-name slideinright
+    &--slideoutright
+      animation-name slideoutright
+    &--slideinleft
+      animation-name slideinleft
+    &--slideoutleft
+      animation-name slideoutleft
+
+  &week
+    display inline-block
+
+  &day
+    buttonReset()
+    user-select none
+    display table-cell
+    text-align center
+    vertical-align middle
+    width daySize
+    height daySize
+    font-size 12px
+    box-sizing border-box
+    border-right 1px solid medium-shade
+    border-bottom 1px solid medium-shade
+    font-weight bold
+    &--empty
+      cursor default
+    &:hover:not(&--empty)
+      background-color primary-color
+      color white

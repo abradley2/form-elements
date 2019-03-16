@@ -16,8 +16,10 @@ module Demo exposing
 
 import Browser
 import ComponentResult as CR
+import Date
 import Dict
 import FormElements.CheckBox as CheckBox
+import FormElements.DatePicker as DatePicker
 import FormElements.RadioButtons as RadioButtons
 import FormElements.SuperSelect as SuperSelect
 import FormElements.Switch as Switch
@@ -25,6 +27,7 @@ import FormElements.TextInput as TextInput
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Task
 
 
 type Chamber
@@ -34,9 +37,11 @@ type Chamber
 
 type Msg
     = NoOp
+    | GetToday Date.Date
     | ToggleSwitch Bool
     | TextInputMsg TextInput.Msg
     | SuperSelectMsg (SuperSelect.Msg ( String, Place ))
+    | DatePickerMsg DatePicker.Model DatePicker.Msg
     | SelectChamber Chamber
     | CheckboxToggled CheckboxOption Bool
 
@@ -52,6 +57,7 @@ type alias Model =
     { switchToggled : Bool
     , textInputData : TextInput.Model
     , superSelectData : SuperSelect.Model
+    , datePickerData : Maybe DatePicker.Model
     , superSelectText : String
     , places : List (SuperSelect.Option ( String, Place ))
     , message : String
@@ -67,6 +73,12 @@ textInputId =
 
 superSelectId =
     "my-super-select"
+
+
+datePickerProps : Model -> DatePicker.Props
+datePickerProps model =
+    { id = "datepicker"
+    }
 
 
 type Place
@@ -91,6 +103,7 @@ init flags =
     ( { switchToggled = False
       , textInputData = textInputData
       , superSelectData = superSelectData
+      , datePickerData = Nothing
       , superSelectText = ""
       , message = ""
       , places =
@@ -107,13 +120,20 @@ init flags =
             , ( Delta, "delta", False )
             ]
       }
-    , Cmd.none
+    , Task.perform GetToday Date.today
     )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        GetToday date ->
+            ( { model
+                | datePickerData = Just (DatePicker.init date)
+              }
+            , Cmd.none
+            )
+
         ToggleSwitch isToggled ->
             ( { model
                 | switchToggled = isToggled
@@ -123,6 +143,13 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+        DatePickerMsg datePickerModel datePickerMsg ->
+            DatePicker.update datePickerMsg datePickerModel (datePickerProps model)
+                |> CR.mapMsg (DatePickerMsg datePickerModel)
+                |> CR.mapModel (\datePickerData -> { model | datePickerData = Just datePickerData })
+                |> CR.applyExternalMsg (\extMsg result -> result)
+                |> CR.resolve
 
         TextInputMsg textInputMsg ->
             TextInput.update textInputMsg model.textInputData
@@ -234,10 +261,14 @@ view model =
         [ style "display" "flex"
         , style "align-items" "center"
         , style "padding-top" "24px"
-        , style "flex-flow" "column"
+        , style "flex-flow" "row"
+        , style "flex-wrap" "wrap"
+        , style "max-width" "768px"
+        , style "margin" "auto"
         ]
         [ div
             [ style "max-width" "320px"
+            , style "margin-right" "48px"
             , style "margin-top" "48px"
             ]
             [ Switch.view
@@ -255,6 +286,7 @@ view model =
             ]
         , div
             [ style "max-width" "320px"
+            , style "margin-right" "48px"
             , style "margin-top" "48px"
             ]
             [ TextInput.view
@@ -264,6 +296,7 @@ view model =
             ]
         , div
             [ style "max-width" "320px"
+            , style "margin-right" "48px"
             , style "margin-top" "48px"
             ]
             [ SuperSelect.view
@@ -273,6 +306,7 @@ view model =
             ]
         , div
             [ style "max-width" "320px"
+            , style "margin-right" "48px"
             , style "margin-top" "48px"
             ]
             [ RadioButtons.view
@@ -286,9 +320,25 @@ view model =
             ]
         , div
             [ style "max-width" "320px"
+            , style "margin-right" "48px"
             , style "margin-top" "48px"
             ]
             (List.map checkboxOption model.checkboxOptions)
+        , div
+            [ style "max-width" "320px"
+            , style "margin-right" "48px"
+            , style "margin-top" "48px"
+            ]
+            [ case model.datePickerData of
+                Just datePickerData ->
+                    DatePicker.view
+                        datePickerData
+                        (datePickerProps model)
+                        |> Html.map (DatePickerMsg datePickerData)
+
+                Nothing ->
+                    text ""
+            ]
         ]
 
 

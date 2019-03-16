@@ -5,7 +5,7 @@
     background-color light-shade
     max-width 280px
     margin-bottom 16px
-    height 56px
+    height 48px
     display flex
     align-items center
     cursor text
@@ -19,17 +19,20 @@
         box-shadow 0px 0px 0px 1px primary-color
 
     .eti-text-input__wrapper
-        display inline-block
+        display flex
+        width 100%
 
     .eti-text-input__input
         background-color transparent
         border none
         outline none
         font-size 16px
-        height calc(56px - 8px) // subtract padding top so we have some breathing room from top label
+        height calc(48px - 8px) // subtract padding top so we have some breathing room from top label
         padding 8px 8px 0px 8px
+        width 100%
 
     .eti-text-input__label
+        line-height 1.15
         position absolute
         top 4px
         font-size 16px
@@ -40,7 +43,7 @@
         color label-color
 
     .eti-text-input__label--raised
-        top calc(0% + 4px)
+        top 2px
         font-size 12px
 
     .eti-text-input__label--active
@@ -74,7 +77,8 @@
         font-size 12px
         padding-left 8px
         position absolute
-        top 60px
+        top 52px
+        line-height 1.15
 
     .eti-bottom-text--error
         color error-color
