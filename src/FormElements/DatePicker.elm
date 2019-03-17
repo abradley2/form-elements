@@ -1,4 +1,13 @@
-module FormElements.DatePicker exposing (DatePickerResult, ExternalMsg(..), Model, Msg(..), Props, defaultProps, init, update, view)
+module FormElements.DatePicker exposing (view, init, update, defaultProps, Msg(..), Model, Props, DatePickerResult, ExternalMsg(..))
+
+{-| A "Date Picker" control for selecting dates from a calendar-like interface.
+
+
+# Definitions
+
+@docs view, init, update, defaultProps, Msg, Model, Props, DatePickerResult, ExternalMsg
+
+-}
 
 import ComponentResult as CR
 import Date
@@ -16,6 +25,8 @@ type alias MonthMap =
     List ( String, Date.Date )
 
 
+{-| The model the element uses to render itself.
+-}
 type alias Model =
     { showDatePicker : Bool
     , today : Date.Date
@@ -104,6 +115,8 @@ weekdayDisplay day =
             "Sat"
 
 
+{-| Configurable properties for rendering the view
+-}
 type alias Props =
     { id : String
     , label : String
@@ -132,6 +145,9 @@ canSelectDate date =
     True
 
 
+{-| Convenience function for getting a default `Props` record. Requires that
+the element's id be passed in.
+-}
 defaultProps : String -> Props
 defaultProps id =
     { id = id
@@ -146,6 +162,8 @@ defaultProps id =
     }
 
 
+{-| Messages return from the view
+-}
 type Msg
     = NoOp
     | ToggleShowDatePicker Bool
@@ -155,14 +173,21 @@ type Msg
     | PreviousMonth Date.Date
 
 
+{-| The external message type for the [Component Result type](https://package.elm-lang.org/packages/z5h/component-result/latest/)
+-}
 type ExternalMsg
     = DateSelected Date.Date
 
 
+{-| Alias for the element's [Component Result type](https://package.elm-lang.org/packages/z5h/component-result/latest/) type.
+-}
 type alias DatePickerResult =
     CR.ComponentResult Model Msg ExternalMsg Never
 
 
+{-| Creates the initial model for the element, using an "index date" to determine what
+starting date the calendar opens up to. This does not have to be `Date.today`
+-}
 init : Date.Date -> ( Model, Cmd Msg )
 init initialIndexDate =
     ( { showDatePicker = False
@@ -174,6 +199,8 @@ init initialIndexDate =
     )
 
 
+{-| The main function for updating the element in response to `Msg`
+-}
 update : Msg -> Model -> Props -> DatePickerResult
 update msg model props =
     case msg of
@@ -229,14 +256,18 @@ yearMonthHeaderView model props indexDate =
         ]
         [ button
             [ type_ "button"
-            , classList
-                [ ( "_datepicker_yearmonthheader__monthchange", True )
-                , ( "_datepicker_yearmonthheader__monthchange--previous", True )
-                ]
+            , class "_datepicker_yearmonthheader__monthchangebutton"
             , disabled (not canSelectPrevious)
             , onClick (PreviousMonth indexDate)
             ]
-            []
+            [ span
+                [ classList
+                    [ ( "_datepicker_yearmonthheader__monthchange", True )
+                    , ( "_datepicker_yearmonthheader__monthchange--previous", True )
+                    ]
+                ]
+                []
+            ]
         , div
             [ class "_datepicker_yearmonthheader__title"
             ]
@@ -244,14 +275,18 @@ yearMonthHeaderView model props indexDate =
             ]
         , button
             [ type_ "button"
-            , classList
-                [ ( "_datepicker_yearmonthheader__monthchange", True )
-                , ( "_datepicker_yearmonthheader__monthchange--next", True )
-                ]
+            , class "_datepicker_yearmonthheader__monthchangebutton"
             , disabled (not canSelectNext)
             , onClick (NextMonth indexDate)
             ]
-            []
+            [ span
+                [ classList
+                    [ ( "_datepicker_yearmonthheader__monthchange", True )
+                    , ( "_datepicker_yearmonthheader__monthchange--next", True )
+                    ]
+                ]
+                []
+            ]
         ]
 
 
@@ -316,6 +351,8 @@ validDays =
     List.filter (\( dayNum, _ ) -> dayNum /= "0")
 
 
+{-| The view for displaying the element.
+-}
 view : Model -> Props -> Html Msg
 view model props =
     div []

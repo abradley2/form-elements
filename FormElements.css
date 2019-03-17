@@ -295,8 +295,20 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 4px;
-  padding: 0px 8px;
+  padding: 8px 0px;
   height: 36px;
+}
+._datepicker_yearmonthheader__monthchangebutton {
+  cursor: pointer;
+  appearance: none;
+  background: none;
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  padding: 8px;
+}
+._datepicker_yearmonthheader__monthchangebutton:focus {
+  outline: none;
 }
 ._datepicker_yearmonthheader__monthchange {
   cursor: pointer;
@@ -305,6 +317,7 @@
   padding: 0px;
   margin: 0px;
   border: none;
+  display: inline-block;
   width: 18px;
   height: 18px;
 }

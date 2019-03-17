@@ -55,10 +55,14 @@ buttonReset()
     justify-content space-between
     align-items center
     margin-bottom 4px
-    padding 0px 8px
+    padding 8px 0px
     height daySize
+    &__monthchangebutton
+      buttonReset()
+      padding 8px
     &__monthchange
       buttonReset()
+      display inline-block
       width 18px
       height 18px
       &--next

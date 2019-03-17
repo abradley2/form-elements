@@ -5,8 +5,8 @@ switches, radio buttons, and checkboxes. [You can see how everything actually lo
 
 To include in your project, add `FormElements.css` to your document.
 
-To change variables in these styles, go into _styl/Variables.styl_, edit the appropriate
-variables, and run `npm install && npm run build-styles` to get an updated `FormFields.css` file.
+To change variables in these styles, go into **theme.json**, edit the appropriate
+variables, and run `npm install && npm run build-styles` to get an updated `FormElements.css` file.
 
 # API
 
