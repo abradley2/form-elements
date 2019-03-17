@@ -77,8 +77,11 @@ superSelectId =
 
 datePickerProps : Model -> DatePicker.Props
 datePickerProps model =
-    { id = "datepicker"
-    }
+    let
+        defaultProps =
+            DatePicker.defaultProps "datepicker"
+    in
+    defaultProps
 
 
 type Place
@@ -128,10 +131,14 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GetToday date ->
+            let
+                ( datePickerData, datePickerCmd ) =
+                    DatePicker.init date
+            in
             ( { model
-                | datePickerData = Just (DatePicker.init date)
+                | datePickerData = Just datePickerData
               }
-            , Cmd.none
+            , Cmd.map (DatePickerMsg datePickerData) datePickerCmd
             )
 
         ToggleSwitch isToggled ->
@@ -271,18 +278,22 @@ view model =
             , style "margin-right" "48px"
             , style "margin-top" "48px"
             ]
-            [ Switch.view
-                { isOn = model.switchToggled
-                , label =
-                    "Developer Mode "
-                        ++ (if model.switchToggled then
-                                "(On)"
+            [ div
+                [ style "min-width" "130px"
+                ]
+                [ Switch.view
+                    { isOn = model.switchToggled
+                    , label =
+                        "Developer Mode "
+                            ++ (if model.switchToggled then
+                                    "(On)"
 
-                            else
-                                "(Off)"
-                           )
-                , handleToggle = ToggleSwitch
-                }
+                                else
+                                    "(Off)"
+                               )
+                    , handleToggle = ToggleSwitch
+                    }
+                ]
             ]
         , div
             [ style "max-width" "320px"

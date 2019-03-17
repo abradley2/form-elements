@@ -108,10 +108,10 @@ padMonthMap currentIndex stopIndex monthMap =
         monthMap
 
     else
-        padMonthMap (currentIndex + 1) stopIndex (( 0, placeholder ) :: monthMap)
+        padMonthMap (currentIndex + 1) stopIndex (( "0", placeholder ) :: monthMap)
 
 
-getMonthMap : Date -> List ( Int, Date )
+getMonthMap : Date -> List ( String, Date )
 getMonthMap indexDate =
     let
         lastDayOfMonth =
@@ -120,12 +120,12 @@ getMonthMap indexDate =
     buildMonthMap [] 1 lastDayOfMonth (setDayOfMonth indexDate 1) indexDate
 
 
-buildMonthMap : List ( Int, Date ) -> Int -> Int -> Date -> Date -> List ( Int, Date )
+buildMonthMap : List ( String, Date ) -> Int -> Int -> Date -> Date -> List ( String, Date )
 buildMonthMap currentMap currentDay lastDay firstDate indexDate =
     let
         newMap =
             currentMap
-                ++ [ ( currentDay
+                ++ [ ( String.fromInt currentDay
                      , fromCalendarDate
                         (Date.year indexDate)
                         (Date.month indexDate)

@@ -275,7 +275,7 @@
 .elm-switch-container .elm-switch .elm-switch__switch-indicator--toggled {
   left: 38px;
   color: #60b5cd;
-  border: solid 3px #293c4b;
+  border: solid 3px rgba(0,0,0,0.54);
 }
 ._datepicker_container {
   display: inline-block;
@@ -313,6 +313,7 @@
 }
 ._datepicker_weekheader {
   display: inline-block;
+  line-height: 1.15;
 }
 ._datepicker_weekheader__day {
   user-select: none;
