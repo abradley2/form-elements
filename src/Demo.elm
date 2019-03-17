@@ -110,9 +110,10 @@ init flags =
       , superSelectText = ""
       , message = ""
       , places =
-            [ ( "The quick brown fox jumps over the lazy dog", ( "New York", NY ) )
+            [ ( "New York", ( "New York", NY ) )
+            , ( "Connecticut", ( "New York", NY ) )
             , ( "Washington DC", ( "Washington DC", DC ) )
-            , ( "Los Angeles", ( "LosAngeles", LA ) )
+            , ( "Oregon", ( "LosAngeles", LA ) )
             ]
       , selected = Nothing
       , chamber = Senate

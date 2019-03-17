@@ -7,6 +7,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.Keyed as Keyed
+import Maybe.Extra as M
 import Task
 import Time exposing (Month(..), Weekday(..))
 
@@ -16,10 +17,26 @@ type alias MonthMap =
 
 
 type alias Model =
-    { today : Date.Date
+    { showDatePicker : Bool
+    , today : Date.Date
     , monthMap : MonthMap
     , outroMonthMap : Maybe MonthMap
     }
+
+
+selectedDateDisplay : Date.Date -> String
+selectedDateDisplay date =
+    let
+        year =
+            Date.year date
+
+        month =
+            monthDisplay (Date.month date)
+
+        day =
+            Date.day date
+    in
+    month ++ ", " ++ String.fromInt day ++ String.fromInt year
 
 
 monthDisplay : Month -> String
@@ -89,6 +106,9 @@ weekdayDisplay day =
 
 type alias Props =
     { id : String
+    , label : String
+    , selectedDateDisplay : Date.Date -> String
+    , selectedDate : Maybe Date.Date
     , weekdayDisplay : Weekday -> String
     , monthDisplay : Month -> String
     , dateIsHighlighted : Date.Date -> Bool
@@ -115,6 +135,9 @@ canSelectDate date =
 defaultProps : String -> Props
 defaultProps id =
     { id = id
+    , label = "Select a Date"
+    , selectedDateDisplay = selectedDateDisplay
+    , selectedDate = Nothing
     , weekdayDisplay = weekdayDisplay
     , monthDisplay = monthDisplay
     , dateIsHighlighted = dateIsHighlighted
@@ -125,6 +148,7 @@ defaultProps id =
 
 type Msg
     = NoOp
+    | ToggleShowDatePicker Bool
     | GetToday Date.Date
     | OnDateSelected Date.Date
     | NextMonth Date.Date
@@ -141,7 +165,8 @@ type alias DatePickerResult =
 
 init : Date.Date -> ( Model, Cmd Msg )
 init initialIndexDate =
-    ( { today = Date.fromCalendarDate 1970 Jan 1
+    ( { showDatePicker = False
+      , today = Date.fromCalendarDate 1970 Jan 1
       , monthMap = Utils.getMonthMap initialIndexDate
       , outroMonthMap = Nothing
       }
@@ -152,6 +177,9 @@ init initialIndexDate =
 update : Msg -> Model -> Props -> DatePickerResult
 update msg model props =
     case msg of
+        ToggleShowDatePicker showDatePicker ->
+            CR.withModel { model | showDatePicker = showDatePicker }
+
         NextMonth indexDate ->
             let
                 nextMonth =
@@ -290,6 +318,55 @@ validDays =
 
 view : Model -> Props -> Html Msg
 view model props =
+    div []
+        [ div
+            [ classList
+                [ ( "eti-container", True )
+                , ( "eti-outline", True )
+                , ( "eti-outline--focused", model.showDatePicker )
+                ]
+            ]
+            [ div
+                [ class "eti-text-input__wrapper"
+                ]
+                [ div
+                    [ classList
+                        [ ( "eti-text-input__label", True )
+                        , ( "eti-text-input__label--raised", M.isJust props.selectedDate )
+                        ]
+                    ]
+                    [ span [] [ text props.label ]
+                    ]
+                , button
+                    [ type_ "button"
+                    , onClick (ToggleShowDatePicker <| not model.showDatePicker)
+                    , classList
+                        [ ( "eti-text-input__input", True )
+                        , ( "_datepicker_textinput__input", True )
+                        ]
+                    ]
+                    []
+                ]
+            ]
+        , div [ class "_datepicker_popupcontainer" ]
+            [ div
+                [ classList
+                    [ ( "_datepicker_popup", True )
+                    , ( "_datepicker_popup--show", True )
+                    ]
+                ]
+                [ if model.showDatePicker then
+                    datePickerView model props
+
+                  else
+                    text ""
+                ]
+            ]
+        ]
+
+
+datePickerView : Model -> Props -> Html Msg
+datePickerView model props =
     let
         -- we need to determine if the outro month
         -- is previous or next so we play the right animation

@@ -40,6 +40,15 @@ buttonReset()
   &container
     display inline-block
 
+  &popupcontainer
+    position relative
+    margin-top -16px
+
+  &popup
+    position absolute
+    &--show
+      box-shadow 1px 1px 1px 1px rgba(0, 0, 0, 0.16)
+
 
   &yearmonthheader
     display flex
@@ -60,6 +69,11 @@ buttonReset()
         border-left 2px solid primary-color
         border-top 2px solid primary-color
         transform rotate(-45deg)
+
+  &textinput
+      &__input
+        min-width 160px
+        cursor pointer    
 
   &weekheader
     display inline-block

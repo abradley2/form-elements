@@ -280,6 +280,16 @@
 ._datepicker_container {
   display: inline-block;
 }
+._datepicker_popupcontainer {
+  position: relative;
+  margin-top: -16px;
+}
+._datepicker_popup {
+  position: absolute;
+}
+._datepicker_popup--show {
+  box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.16);
+}
 ._datepicker_yearmonthheader {
   display: flex;
   justify-content: space-between;
@@ -310,6 +320,10 @@
   border-left: 2px solid #60b5cd;
   border-top: 2px solid #60b5cd;
   transform: rotate(-45deg);
+}
+._datepicker_textinput__input {
+  min-width: 160px;
+  cursor: pointer;
 }
 ._datepicker_weekheader {
   display: inline-block;

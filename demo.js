@@ -5815,13 +5815,16 @@ var abradley2$form_elements$Demo$init = function (flags) {
 			places: _List_fromArray(
 				[
 					_Utils_Tuple2(
-					'The quick brown fox jumps over the lazy dog',
+					'New York',
+					_Utils_Tuple2('New York', abradley2$form_elements$Demo$NY)),
+					_Utils_Tuple2(
+					'Connecticut',
 					_Utils_Tuple2('New York', abradley2$form_elements$Demo$NY)),
 					_Utils_Tuple2(
 					'Washington DC',
 					_Utils_Tuple2('Washington DC', abradley2$form_elements$Demo$DC)),
 					_Utils_Tuple2(
-					'Los Angeles',
+					'Oregon',
 					_Utils_Tuple2('LosAngeles', abradley2$form_elements$Demo$LA))
 				]),
 			selected: elm$core$Maybe$Nothing,
@@ -10280,55 +10283,6 @@ var abradley2$form_elements$FormElements$DatePicker$monthDisplay = function (mon
 			return 'December';
 	}
 };
-var abradley2$form_elements$FormElements$DatePicker$weekdayDisplay = function (day) {
-	switch (day.$) {
-		case 'Sun':
-			return 'Sun';
-		case 'Mon':
-			return 'Mon';
-		case 'Tue':
-			return 'Tue';
-		case 'Wed':
-			return 'Wed';
-		case 'Thu':
-			return 'Thu';
-		case 'Fri':
-			return 'Fri';
-		default:
-			return 'Sat';
-	}
-};
-var abradley2$form_elements$FormElements$DatePicker$defaultProps = function (id) {
-	return {canSelectDate: abradley2$form_elements$FormElements$DatePicker$canSelectDate, canSelectMonth: abradley2$form_elements$FormElements$DatePicker$canSelectMonth, dateIsHighlighted: abradley2$form_elements$FormElements$DatePicker$dateIsHighlighted, id: id, monthDisplay: abradley2$form_elements$FormElements$DatePicker$monthDisplay, weekdayDisplay: abradley2$form_elements$FormElements$DatePicker$weekdayDisplay};
-};
-var abradley2$form_elements$Demo$datePickerProps = function (model) {
-	var defaultProps = abradley2$form_elements$FormElements$DatePicker$defaultProps('datepicker');
-	return defaultProps;
-};
-var abradley2$form_elements$FormElements$DatePicker$GetToday = function (a) {
-	return {$: 'GetToday', a: a};
-};
-var abradley2$form_elements$FormElements$Util$DateUtils$placeholder = A3(justinmimbs$date$Date$fromCalendarDate, 1970, elm$time$Time$Jan, 1);
-var abradley2$form_elements$FormElements$Util$DateUtils$padMonthMap = F3(
-	function (currentIndex, stopIndex, monthMap) {
-		padMonthMap:
-		while (true) {
-			if (_Utils_eq(currentIndex, stopIndex)) {
-				return monthMap;
-			} else {
-				var $temp$currentIndex = currentIndex + 1,
-					$temp$stopIndex = stopIndex,
-					$temp$monthMap = A2(
-					elm$core$List$cons,
-					_Utils_Tuple2('0', abradley2$form_elements$FormElements$Util$DateUtils$placeholder),
-					monthMap);
-				currentIndex = $temp$currentIndex;
-				stopIndex = $temp$stopIndex;
-				monthMap = $temp$monthMap;
-				continue padMonthMap;
-			}
-		}
-	});
 var justinmimbs$date$Date$monthToNumber = function (m) {
 	switch (m.$) {
 		case 'Jan':
@@ -10443,11 +10397,73 @@ var justinmimbs$date$Date$toCalendarDate = function (_n0) {
 		justinmimbs$date$Date$RD(rd));
 	return A3(justinmimbs$date$Date$toCalendarDateHelp, date.year, elm$time$Time$Jan, date.ordinalDay);
 };
+var justinmimbs$date$Date$day = A2(
+	elm$core$Basics$composeR,
+	justinmimbs$date$Date$toCalendarDate,
+	function ($) {
+		return $.day;
+	});
 var justinmimbs$date$Date$month = A2(
 	elm$core$Basics$composeR,
 	justinmimbs$date$Date$toCalendarDate,
 	function ($) {
 		return $.month;
+	});
+var abradley2$form_elements$FormElements$DatePicker$selectedDateDisplay = function (date) {
+	var year = justinmimbs$date$Date$year(date);
+	var month = abradley2$form_elements$FormElements$DatePicker$monthDisplay(
+		justinmimbs$date$Date$month(date));
+	var day = justinmimbs$date$Date$day(date);
+	return month + (', ' + (elm$core$String$fromInt(day) + elm$core$String$fromInt(year)));
+};
+var abradley2$form_elements$FormElements$DatePicker$weekdayDisplay = function (day) {
+	switch (day.$) {
+		case 'Sun':
+			return 'Sun';
+		case 'Mon':
+			return 'Mon';
+		case 'Tue':
+			return 'Tue';
+		case 'Wed':
+			return 'Wed';
+		case 'Thu':
+			return 'Thu';
+		case 'Fri':
+			return 'Fri';
+		default:
+			return 'Sat';
+	}
+};
+var abradley2$form_elements$FormElements$DatePicker$defaultProps = function (id) {
+	return {canSelectDate: abradley2$form_elements$FormElements$DatePicker$canSelectDate, canSelectMonth: abradley2$form_elements$FormElements$DatePicker$canSelectMonth, dateIsHighlighted: abradley2$form_elements$FormElements$DatePicker$dateIsHighlighted, id: id, label: 'Select a Date', monthDisplay: abradley2$form_elements$FormElements$DatePicker$monthDisplay, selectedDate: elm$core$Maybe$Nothing, selectedDateDisplay: abradley2$form_elements$FormElements$DatePicker$selectedDateDisplay, weekdayDisplay: abradley2$form_elements$FormElements$DatePicker$weekdayDisplay};
+};
+var abradley2$form_elements$Demo$datePickerProps = function (model) {
+	var defaultProps = abradley2$form_elements$FormElements$DatePicker$defaultProps('datepicker');
+	return defaultProps;
+};
+var abradley2$form_elements$FormElements$DatePicker$GetToday = function (a) {
+	return {$: 'GetToday', a: a};
+};
+var abradley2$form_elements$FormElements$Util$DateUtils$placeholder = A3(justinmimbs$date$Date$fromCalendarDate, 1970, elm$time$Time$Jan, 1);
+var abradley2$form_elements$FormElements$Util$DateUtils$padMonthMap = F3(
+	function (currentIndex, stopIndex, monthMap) {
+		padMonthMap:
+		while (true) {
+			if (_Utils_eq(currentIndex, stopIndex)) {
+				return monthMap;
+			} else {
+				var $temp$currentIndex = currentIndex + 1,
+					$temp$stopIndex = stopIndex,
+					$temp$monthMap = A2(
+					elm$core$List$cons,
+					_Utils_Tuple2('0', abradley2$form_elements$FormElements$Util$DateUtils$placeholder),
+					monthMap);
+				currentIndex = $temp$currentIndex;
+				stopIndex = $temp$stopIndex;
+				monthMap = $temp$monthMap;
+				continue padMonthMap;
+			}
+		}
 	});
 var justinmimbs$date$Date$weekdayNumber = function (_n0) {
 	var rd = _n0.a;
@@ -10527,12 +10543,6 @@ var justinmimbs$date$Date$add = F3(
 				return justinmimbs$date$Date$RD(rd + n);
 		}
 	});
-var justinmimbs$date$Date$day = A2(
-	elm$core$Basics$composeR,
-	justinmimbs$date$Date$toCalendarDate,
-	function ($) {
-		return $.day;
-	});
 var abradley2$form_elements$FormElements$Util$DateUtils$getLastDayOfMonth = F2(
 	function (date, prevTry) {
 		getLastDayOfMonth:
@@ -10577,6 +10587,7 @@ var abradley2$form_elements$FormElements$DatePicker$init = function (initialInde
 		{
 			monthMap: abradley2$form_elements$FormElements$Util$DateUtils$getMonthMap(initialIndexDate),
 			outroMonthMap: elm$core$Maybe$Nothing,
+			showDatePicker: false,
 			today: A3(justinmimbs$date$Date$fromCalendarDate, 1970, elm$time$Time$Jan, 1)
 		},
 		A2(elm$core$Task$perform, abradley2$form_elements$FormElements$DatePicker$GetToday, justinmimbs$date$Date$today));
@@ -10618,6 +10629,12 @@ var z5h$component_result$ComponentResult$withModel = function (model) {
 var abradley2$form_elements$FormElements$DatePicker$update = F3(
 	function (msg, model, props) {
 		switch (msg.$) {
+			case 'ToggleShowDatePicker':
+				var showDatePicker = msg.a;
+				return z5h$component_result$ComponentResult$withModel(
+					_Utils_update(
+						model,
+						{showDatePicker: showDatePicker}));
 			case 'NextMonth':
 				var indexDate = msg.a;
 				var nextMonth = abradley2$form_elements$FormElements$Util$DateUtils$getMonthMap(
@@ -11291,6 +11308,9 @@ var abradley2$form_elements$Demo$textInputSettings = function (model) {
 			value: model.message
 		});
 };
+var abradley2$form_elements$FormElements$DatePicker$ToggleShowDatePicker = function (a) {
+	return {$: 'ToggleShowDatePicker', a: a};
+};
 var abradley2$form_elements$FormElements$DatePicker$OnDateSelected = function (a) {
 	return {$: 'OnDateSelected', a: a};
 };
@@ -11479,7 +11499,7 @@ var justinmimbs$date$Date$toRataDie = function (_n0) {
 	var rd = _n0.a;
 	return rd;
 };
-var abradley2$form_elements$FormElements$DatePicker$view = F2(
+var abradley2$form_elements$FormElements$DatePicker$datePickerView = F2(
 	function (model, props) {
 		var outroDay = elm$core$String$fromInt(
 			A2(
@@ -11548,6 +11568,108 @@ var abradley2$form_elements$FormElements$DatePicker$view = F2(
 							]));
 				},
 				mIndexDate));
+	});
+var elm_community$maybe_extra$Maybe$Extra$isJust = function (m) {
+	if (m.$ === 'Nothing') {
+		return false;
+	} else {
+		return true;
+	}
+};
+var abradley2$form_elements$FormElements$DatePicker$view = F2(
+	function (model, props) {
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$classList(
+							_List_fromArray(
+								[
+									_Utils_Tuple2('eti-container', true),
+									_Utils_Tuple2('eti-outline', true),
+									_Utils_Tuple2('eti-outline--focused', model.showDatePicker)
+								]))
+						]),
+					_List_fromArray(
+						[
+							A2(
+							elm$html$Html$div,
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$class('eti-text-input__wrapper')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									elm$html$Html$div,
+									_List_fromArray(
+										[
+											elm$html$Html$Attributes$classList(
+											_List_fromArray(
+												[
+													_Utils_Tuple2('eti-text-input__label', true),
+													_Utils_Tuple2(
+													'eti-text-input__label--raised',
+													elm_community$maybe_extra$Maybe$Extra$isJust(props.selectedDate))
+												]))
+										]),
+									_List_fromArray(
+										[
+											A2(
+											elm$html$Html$span,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text(props.label)
+												]))
+										])),
+									A2(
+									elm$html$Html$button,
+									_List_fromArray(
+										[
+											elm$html$Html$Attributes$type_('button'),
+											elm$html$Html$Events$onClick(
+											abradley2$form_elements$FormElements$DatePicker$ToggleShowDatePicker(!model.showDatePicker)),
+											elm$html$Html$Attributes$classList(
+											_List_fromArray(
+												[
+													_Utils_Tuple2('eti-text-input__input', true),
+													_Utils_Tuple2('_datepicker_textinput__input', true)
+												]))
+										]),
+									_List_Nil)
+								]))
+						])),
+					A2(
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('_datepicker_popupcontainer')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							elm$html$Html$div,
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$classList(
+									_List_fromArray(
+										[
+											_Utils_Tuple2('_datepicker_popup', true),
+											_Utils_Tuple2('_datepicker_popup--show', true)
+										]))
+								]),
+							_List_fromArray(
+								[
+									model.showDatePicker ? A2(abradley2$form_elements$FormElements$DatePicker$datePickerView, model, props) : elm$html$Html$text('')
+								]))
+						]))
+				]));
 	});
 var abradley2$form_elements$FormElements$RadioButtons$radioButtonView = F3(
 	function (onSelect, selected, _n0) {
@@ -12296,4 +12418,4 @@ var abradley2$form_elements$Demo$main = elm$browser$Browser$element(
 	{init: abradley2$form_elements$Demo$init, subscriptions: abradley2$form_elements$Demo$subscriptions, update: abradley2$form_elements$Demo$update, view: abradley2$form_elements$Demo$view});
 _Platform_export({'Demo':{'init':abradley2$form_elements$Demo$main(
 	elm$json$Json$Decode$succeed(
-		{}))({"versions":{"elm":"0.19.0"},"types":{"message":"Demo.Msg","aliases":{"FormElements.DatePicker.Model":{"args":[],"type":"{ today : Date.Date, monthMap : FormElements.DatePicker.MonthMap, outroMonthMap : Maybe.Maybe FormElements.DatePicker.MonthMap }"},"FormElements.DatePicker.MonthMap":{"args":[],"type":"List.List ( String.String, Date.Date )"},"FormElements.SuperSelect.Option":{"args":["a"],"type":"( String.String, a )"},"FormElements.SuperSelect.Props":{"args":["a"],"type":"{ id : String.String, options : List.List (FormElements.SuperSelect.Option a), errorText : Maybe.Maybe String.String, helperText : Maybe.Maybe String.String, label : String.String, value : Maybe.Maybe a, inputValue : String.String }"},"Date.RataDie":{"args":[],"type":"Basics.Int"}},"unions":{"Demo.Msg":{"args":[],"tags":{"NoOp":[],"GetToday":["Date.Date"],"ToggleSwitch":["Basics.Bool"],"TextInputMsg":["FormElements.TextInput.Msg"],"SuperSelectMsg":["FormElements.SuperSelect.Msg ( String.String, Demo.Place )"],"DatePickerMsg":["FormElements.DatePicker.Model","FormElements.DatePicker.Msg"],"SelectChamber":["Demo.Chamber"],"CheckboxToggled":["Demo.CheckboxOption","Basics.Bool"]}},"Demo.Chamber":{"args":[],"tags":{"House":[],"Senate":[]}},"Demo.CheckboxOption":{"args":[],"tags":{"Alpha":[],"Bravo":[],"Charlie":[],"Delta":[]}},"Demo.Place":{"args":[],"tags":{"NY":[],"DC":[],"LA":[]}},"FormElements.DatePicker.Msg":{"args":[],"tags":{"NoOp":[],"GetToday":["Date.Date"],"OnDateSelected":["Date.Date"],"NextMonth":["Date.Date"],"PreviousMonth":["Date.Date"]}},"FormElements.SuperSelect.Msg":{"args":["a"],"tags":{"NoOp":[],"Clear":[],"TextInputMsg":["FormElements.TextInput.Msg"],"UnsetFocusedOption":[],"SetFocusedOption":["Basics.Int"],"OptionSelected":["FormElements.SuperSelect.Option a"],"KeyPress":["FormElements.SuperSelect.Props a","Basics.Int"]}},"FormElements.TextInput.Msg":{"args":[],"tags":{"NoOp":[],"OnInput":["String.String"],"OnFocus":[],"OnBlur":[],"OnInputKeyPress":["Basics.Int"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Date.Date":{"args":[],"tags":{"RD":["Date.RataDie"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}}}}})}});}(this));
+		{}))({"versions":{"elm":"0.19.0"},"types":{"message":"Demo.Msg","aliases":{"FormElements.DatePicker.Model":{"args":[],"type":"{ showDatePicker : Basics.Bool, today : Date.Date, monthMap : FormElements.DatePicker.MonthMap, outroMonthMap : Maybe.Maybe FormElements.DatePicker.MonthMap }"},"FormElements.DatePicker.MonthMap":{"args":[],"type":"List.List ( String.String, Date.Date )"},"FormElements.SuperSelect.Option":{"args":["a"],"type":"( String.String, a )"},"FormElements.SuperSelect.Props":{"args":["a"],"type":"{ id : String.String, options : List.List (FormElements.SuperSelect.Option a), errorText : Maybe.Maybe String.String, helperText : Maybe.Maybe String.String, label : String.String, value : Maybe.Maybe a, inputValue : String.String }"},"Date.RataDie":{"args":[],"type":"Basics.Int"}},"unions":{"Demo.Msg":{"args":[],"tags":{"NoOp":[],"GetToday":["Date.Date"],"ToggleSwitch":["Basics.Bool"],"TextInputMsg":["FormElements.TextInput.Msg"],"SuperSelectMsg":["FormElements.SuperSelect.Msg ( String.String, Demo.Place )"],"DatePickerMsg":["FormElements.DatePicker.Model","FormElements.DatePicker.Msg"],"SelectChamber":["Demo.Chamber"],"CheckboxToggled":["Demo.CheckboxOption","Basics.Bool"]}},"Demo.Chamber":{"args":[],"tags":{"House":[],"Senate":[]}},"Demo.CheckboxOption":{"args":[],"tags":{"Alpha":[],"Bravo":[],"Charlie":[],"Delta":[]}},"Demo.Place":{"args":[],"tags":{"NY":[],"DC":[],"LA":[]}},"FormElements.DatePicker.Msg":{"args":[],"tags":{"NoOp":[],"ToggleShowDatePicker":["Basics.Bool"],"GetToday":["Date.Date"],"OnDateSelected":["Date.Date"],"NextMonth":["Date.Date"],"PreviousMonth":["Date.Date"]}},"FormElements.SuperSelect.Msg":{"args":["a"],"tags":{"NoOp":[],"Clear":[],"TextInputMsg":["FormElements.TextInput.Msg"],"UnsetFocusedOption":[],"SetFocusedOption":["Basics.Int"],"OptionSelected":["FormElements.SuperSelect.Option a"],"KeyPress":["FormElements.SuperSelect.Props a","Basics.Int"]}},"FormElements.TextInput.Msg":{"args":[],"tags":{"NoOp":[],"OnInput":["String.String"],"OnFocus":[],"OnBlur":[],"OnInputKeyPress":["Basics.Int"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Date.Date":{"args":[],"tags":{"RD":["Date.RataDie"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}}}}})}});}(this));
