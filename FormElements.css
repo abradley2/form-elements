@@ -335,6 +335,7 @@
   transform: rotate(-45deg);
 }
 ._datepicker_textinput__input {
+  text-align: left;
   min-width: 160px;
   cursor: pointer;
 }
@@ -407,6 +408,10 @@
 }
 ._datepicker_day--empty {
   cursor: default;
+}
+._datepicker_day--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 ._datepicker_day:hover:not(._datepicker_day--empty) {
   background-color: #60b5cd;

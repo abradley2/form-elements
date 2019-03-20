@@ -47,7 +47,7 @@ selectedDateDisplay date =
         day =
             Date.day date
     in
-    month ++ ", " ++ String.fromInt day ++ String.fromInt year
+    month ++ " " ++ String.fromInt day ++ ", " ++ String.fromInt year
 
 
 monthDisplay : Month -> String
@@ -225,7 +225,7 @@ update msg model props =
             CR.withModel { model | today = today }
 
         OnDateSelected date ->
-            CR.withModel model
+            CR.withModel { model | showDatePicker = False }
                 |> CR.withExternalMsg (DateSelected date)
 
         _ ->
@@ -271,7 +271,7 @@ yearMonthHeaderView model props indexDate =
         , div
             [ class "_datepicker_yearmonthheader__title"
             ]
-            [ text <| props.monthDisplay currentMonth ++ ", " ++ String.fromInt currentYear
+            [ text <| props.monthDisplay currentMonth ++ " " ++ ", " ++ String.fromInt currentYear
             ]
         , button
             [ type_ "button"
@@ -316,12 +316,18 @@ weekHeaderView model props =
 
 dayView : Model -> Props -> ( String, Date.Date ) -> Html Msg
 dayView model props ( dayNum, date ) =
+    let
+        isSelectable =
+            props.canSelectDate date
+    in
     button
         [ type_ "button"
         , classList
             [ ( "_datepicker_day", True )
             , ( "_datepicker_day--empty", dayNum == "0" )
+            , ( "_datepicker_day--disabled", not isSelectable )
             ]
+        , disabled (not isSelectable)
         , onClick (OnDateSelected date)
         ]
         [ if dayNum == "0" then
@@ -382,7 +388,13 @@ view model props =
                         , ( "_datepicker_textinput__input", True )
                         ]
                     ]
-                    []
+                    [ text
+                        (Maybe.map
+                            selectedDateDisplay
+                            props.selectedDate
+                            |> Maybe.withDefault ""
+                        )
+                    ]
                 ]
             ]
         , div [ class "_datepicker_popupcontainer" ]

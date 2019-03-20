@@ -62,6 +62,7 @@ type alias Model =
     , places : List (SuperSelect.Option ( String, Place ))
     , message : String
     , selected : Maybe ( String, Place )
+    , selectedDate : Maybe Date.Date
     , chamber : Chamber
     , checkboxOptions : List ( CheckboxOption, String, Bool )
     }
@@ -81,7 +82,7 @@ datePickerProps model =
         defaultProps =
             DatePicker.defaultProps "datepicker"
     in
-    defaultProps
+    { defaultProps | selectedDate = model.selectedDate }
 
 
 type Place
@@ -116,6 +117,7 @@ init flags =
             , ( "Oregon", ( "LosAngeles", LA ) )
             ]
       , selected = Nothing
+      , selectedDate = Nothing
       , chamber = Senate
       , checkboxOptions =
             [ ( Alpha, "alpha", False )
@@ -156,7 +158,13 @@ update msg model =
             DatePicker.update datePickerMsg datePickerModel (datePickerProps model)
                 |> CR.mapMsg (DatePickerMsg datePickerModel)
                 |> CR.mapModel (\datePickerData -> { model | datePickerData = Just datePickerData })
-                |> CR.applyExternalMsg (\extMsg result -> result)
+                |> CR.applyExternalMsg
+                    (\extMsg result ->
+                        case extMsg of
+                            DatePicker.DateSelected date ->
+                                result
+                                    |> CR.mapModel (\m -> { m | selectedDate = Just date })
+                    )
                 |> CR.resolve
 
         TextInputMsg textInputMsg ->
