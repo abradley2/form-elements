@@ -310,6 +310,9 @@
 ._datepicker_yearmonthheader__monthchangebutton:focus {
   outline: none;
 }
+._datepicker_yearmonthheader__monthchangebutton--disabled {
+  visibility: hidden;
+}
 ._datepicker_yearmonthheader__monthchange {
   cursor: pointer;
   appearance: none;

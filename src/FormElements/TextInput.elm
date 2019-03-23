@@ -143,6 +143,7 @@ textInput model props =
             [ id <| getTextInputId model.id
             , class "eti-text-input__input"
             , type_ "text"
+            , autocomplete False
             , value props.value
             , onInput OnInput
             , onBlur OnBlur

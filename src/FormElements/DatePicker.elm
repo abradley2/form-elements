@@ -16,6 +16,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.Keyed as Keyed
+import Json.Decode as D
 import Maybe.Extra as M
 import Task
 import Time exposing (Month(..), Weekday(..))
@@ -256,7 +257,10 @@ yearMonthHeaderView model props indexDate =
         ]
         [ button
             [ type_ "button"
-            , class "_datepicker_yearmonthheader__monthchangebutton"
+            , classList
+                [ ( "_datepicker_yearmonthheader__monthchangebutton", True )
+                , ( "_datepicker_yearmonthheader__monthchangebutton--disabled", not canSelectPrevious )
+                ]
             , disabled (not canSelectPrevious)
             , onClick (PreviousMonth indexDate)
             ]
@@ -271,11 +275,14 @@ yearMonthHeaderView model props indexDate =
         , div
             [ class "_datepicker_yearmonthheader__title"
             ]
-            [ text <| props.monthDisplay currentMonth ++ " " ++ ", " ++ String.fromInt currentYear
+            [ text <| props.monthDisplay currentMonth ++ " " ++ String.fromInt currentYear
             ]
         , button
             [ type_ "button"
-            , class "_datepicker_yearmonthheader__monthchangebutton"
+            , classList
+                [ ( "_datepicker_yearmonthheader__monthchangebutton", True )
+                , ( "_datepicker_yearmonthheader__monthchangebutton--disabled", not canSelectNext )
+                ]
             , disabled (not canSelectNext)
             , onClick (NextMonth indexDate)
             ]
@@ -453,6 +460,8 @@ datePickerView model props =
         (\indexDate ->
             div
                 [ class "_datepicker_container"
+
+                -- , stopPropagationOn "click" (D.map (\a -> ( a, True )) (D.succeed NoOp))
                 ]
                 [ yearMonthHeaderView model props indexDate
                 , weekHeaderView model props
